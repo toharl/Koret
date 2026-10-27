@@ -12,7 +12,7 @@
 <title>קוראים לבד</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600;700&family=Secular+One&display=swap">
 <style>
-/* Layout: stage chips, letter strip + tips, mode tabs, one big reading card. Single bright look on purpose (kids' app). */
+/* Layout: header, all learned letters strip, one big card, then mode tabs and stage chips below. Single bright look on purpose (kids' app). */
 :root{
   --sky:#E6F1FA; --paper:#FFFFFF; --ink:#16324A; --muted:#4F6577;
   --sun:#F6B819; --sun-deep:#B07A00; --leaf:#1F8A5B; --line:#C9DCEB; --berry:#C2416B; --note:#FFF6DA;
@@ -23,13 +23,17 @@
 html,body{height:100%}
 [hidden]{display:none!important}
 body{background:var(--sky);color:var(--ink);font-family:var(--read);font-size:16px}
-.wrap{max-width:920px;margin:0 auto;padding-block:20px 40px;padding-inline:16px;display:flex;flex-direction:column;gap:16px}
+.wrap{max-width:920px;margin:0 auto;padding-block:16px 40px;padding-inline:16px;display:flex;flex-direction:column;gap:14px}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-h1{font-family:var(--display);font-weight:400;font-size:clamp(28px,5vw,40px);margin:0}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(26px,5vw,38px);margin:0}
 .stars{display:flex;align-items:center;gap:8px;background:var(--paper);border:2px solid var(--line);border-radius:999px;padding:6px 16px;font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums}
 .stars svg{width:26px;height:26px;fill:var(--sun);stroke:var(--sun-deep);stroke-width:1.2}
 button{font-family:inherit;cursor:pointer;color:var(--ink)}
 button:focus-visible{outline:3px solid var(--berry);outline-offset:3px}
+.abc{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:10px}
+.ab{position:relative;min-width:40px;height:44px;padding:0 6px;border:2px solid var(--line);border-radius:10px;background:var(--sky);font-size:26px;font-weight:700;line-height:1}
+.ab.new{background:var(--note);border-color:var(--sun-deep)}
+.ab .snd{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:4px;background:var(--ink);color:#FFFFFF;font-size:13px;font-weight:400;padding:3px 7px;border-radius:6px;white-space:nowrap;direction:ltr;z-index:5}
 .stages{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
 .stage{position:relative;border:2px solid var(--line);background:var(--paper);border-radius:16px;padding:8px 12px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;text-align:right}
 .stage b{font-family:var(--display);font-weight:400;font-size:18px}
@@ -37,24 +41,13 @@ button:focus-visible{outline:3px solid var(--berry);outline-offset:3px}
 .stage[aria-pressed="true"]{background:var(--sun);border-color:var(--sun-deep)}
 .stage[aria-pressed="true"] span{color:var(--ink)}
 .stage .medal{position:absolute;top:-8px;left:-8px;width:28px;height:28px}
-.panel{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:12px}
-.letters,.tips{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
-.tips{background:var(--note);border-color:#EED9A0}
-.lab{font-size:14px;color:var(--muted)}
-.tips h2{font-family:var(--display);font-weight:400;font-size:18px;margin:0}
-.tips ul{margin:0;padding-inline-start:18px;display:flex;flex-direction:column;gap:6px;font-size:15px;line-height:1.5}
-.ltrs{display:flex;flex-wrap:wrap;gap:8px}
-.ltr{width:64px;height:76px;border:2px solid var(--line);border-radius:14px;background:var(--sky);display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ltr .g{font-size:38px;font-weight:700;line-height:1.15}
-.ltr .s{font-size:12px;color:var(--muted);direction:ltr;min-height:15px}
-.ltr.old{width:46px;height:56px;opacity:.8}
-.ltr.old .g{font-size:24px}
 .tabs{display:flex;gap:8px;flex-wrap:wrap}
-.tab{flex:1 1 130px;border:2px solid var(--line);background:var(--paper);border-radius:999px;padding:10px 14px;font-family:var(--display);font-size:19px;display:flex;align-items:center;justify-content:center;gap:6px}
+.tab{flex:1 1 120px;border:2px solid var(--line);background:var(--paper);border-radius:999px;padding:10px 14px;font-family:var(--display);font-size:19px;display:flex;align-items:center;justify-content:center;gap:6px}
 .tab[aria-selected="true"]{background:var(--ink);color:#FFFFFF;border-color:var(--ink)}
-.tab .ok{width:18px;height:18px;border-radius:50%;background:var(--leaf);display:inline-flex;align-items:center;justify-content:center}
-.tab .ok svg{width:12px;height:12px;stroke:#FFFFFF;stroke-width:3;fill:none}
-.card{background:var(--paper);border:3px solid var(--line);border-radius:28px;padding:24px 18px;min-height:380px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center}
+.tab .ok,.item .ok{width:18px;height:18px;border-radius:50%;background:var(--leaf);display:inline-flex;align-items:center;justify-content:center}
+.tab .ok svg,.item .ok svg{width:12px;height:12px;stroke:#FFFFFF;stroke-width:3;fill:none}
+.tab .part{font-family:var(--read);font-size:13px;background:var(--note);color:var(--ink);border-radius:999px;padding:1px 7px;direction:ltr}
+.card{background:var(--paper);border:3px solid var(--line);border-radius:28px;padding:22px 16px;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center}
 .prog{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
 .prog i{width:12px;height:12px;border-radius:50%;background:var(--line)}
 .prog i.done{background:var(--leaf)}
@@ -63,27 +56,29 @@ button:focus-visible{outline:3px solid var(--berry);outline-offset:3px}
 .big{font-size:clamp(64px,13vw,120px);font-weight:700;line-height:1.35;word-break:break-word}
 .sent{font-size:clamp(34px,6.5vw,58px);font-weight:600;line-height:1.6}
 .pic{font-size:clamp(90px,18vw,140px);line-height:1}
+.spic{font-size:clamp(64px,13vw,104px);line-height:1.15;letter-spacing:4px}
 .qltr{font-size:clamp(110px,22vw,170px);font-weight:700;line-height:1.1;width:1.4em;height:1.4em;border:3px dashed var(--line);border-radius:28px;display:flex;align-items:center;justify-content:center}
 .ask{font-family:var(--display);font-size:22px;color:var(--muted)}
 .acts{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .btn{border:none;border-radius:18px;padding:16px 28px;font-family:var(--display);font-size:24px;min-height:60px}
+.btn:disabled{opacity:.4;cursor:default}
 .yes{background:var(--leaf);color:#FFFFFF}
 .again{background:var(--sky);border:2px solid var(--line)}
 .hintb{background:var(--note);border:2px solid #EED9A0;font-size:20px;padding:10px 18px;min-height:48px}
-.hint{font-size:28px;direction:ltr;color:var(--ink);background:var(--note);border-radius:12px;padding:6px 16px}
+.hint{font-size:clamp(30px,6vw,44px);font-weight:600;color:var(--ink);background:var(--note);border-radius:14px;padding:4px 18px}
 .choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%;max-width:640px}
-.choices.two{grid-template-columns:repeat(2,minmax(0,1fr));max-width:440px}
+.choices.two{grid-template-columns:repeat(2,minmax(0,1fr));max-width:520px}
 .choice{border:3px solid var(--line);background:var(--sky);border-radius:20px;padding:14px 6px;font-size:clamp(28px,6vw,44px);font-weight:700;line-height:1.4}
 .choice.lat{direction:ltr;font-family:var(--display);font-weight:400}
 .choice.right{background:var(--leaf);color:#FFFFFF;border-color:var(--leaf)}
+.choice.right .pc{background:transparent;color:#FFFFFF}
 .choice.wrong{border-color:var(--berry);animation:shake .35s}
+.choice .split{font-size:clamp(28px,6vw,40px)}
 .msg{font-family:var(--display);font-size:24px;min-height:34px;color:var(--leaf)}
-.msg.no{color:var(--berry)}
 .compare{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
 .compare div{display:flex;flex-direction:column;align-items:center;background:var(--sky);border-radius:14px;padding:6px 16px}
 .compare b{font-size:52px;line-height:1.2}
 .compare span{direction:ltr;font-size:16px;color:var(--muted)}
-.ctip{font-size:17px;color:var(--muted);max-width:52ch}
 .win{font-family:var(--display);font-size:clamp(40px,8vw,64px)}
 .trophy{display:flex;gap:6px}
 .trophy svg{width:54px;height:54px;fill:var(--sun);stroke:var(--sun-deep);stroke-width:1}
@@ -93,6 +88,7 @@ button:focus-visible{outline:3px solid var(--berry);outline-offset:3px}
 .lcol{background:var(--sky);border-radius:22px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
 .lcol .L{font-size:clamp(80px,14vw,120px);font-weight:700;line-height:1.15}
 .lcol .S,.introS{direction:ltr;font-family:var(--display);font-size:26px;color:var(--muted)}
+.lcol .S.he{direction:rtl;font-family:var(--read);font-size:22px}
 .lcol .T{font-size:18px;background:var(--note);border:1px solid #EED9A0;border-radius:999px;padding:2px 12px}
 .lcol .W{font-size:clamp(34px,6vw,46px);font-weight:600;line-height:1.4}
 .introL{font-size:clamp(120px,24vw,180px);font-weight:700;line-height:1.1}
@@ -105,6 +101,18 @@ button:focus-visible{outline:3px solid var(--berry);outline-offset:3px}
 .split .op{font-size:32px;color:var(--muted);font-weight:400}
 .more{display:flex;flex-direction:column;gap:8px}
 .more .split{font-size:clamp(28px,5vw,38px)}
+.pbox{background:var(--note);border:2px solid #EED9A0;border-radius:18px;padding:14px 18px;text-align:right;max-width:58ch;font-size:19px;line-height:1.75;white-space:pre-line}
+.pbox b{display:block;font-family:var(--display);font-weight:400;font-size:17px;color:var(--sun-deep);margin-bottom:4px}
+.pal{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.sw{width:52px;height:52px;border-radius:50%;border:3px solid #FFFFFF;box-shadow:0 0 0 2px var(--line);padding:0}
+.sw.on{box-shadow:0 0 0 4px var(--ink);transform:scale(1.12)}
+.pal.shake{animation:shake .35s}
+.cgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;width:100%;max-width:680px}
+.cobj{background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:6px;min-width:0}
+.cobj svg{display:block;width:100%;height:auto}
+.cobj .fz{stroke:#16324A;stroke-width:4;stroke-linejoin:round}
+.cobj .ln{stroke:#16324A;stroke-width:4;fill:none;stroke-linecap:round}
+.cobj.wrong{border-color:var(--berry);animation:shake .35s}
 .hbtns{display:flex;gap:8px;align-items:center}
 .ibtn{width:48px;height:48px;border-radius:50%;border:2px solid var(--line);background:var(--paper);display:inline-flex;align-items:center;justify-content:center;font-size:26px;padding:0;line-height:1;flex:none}
 .ibtn svg{width:24px;height:24px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -137,29 +145,46 @@ button:focus-visible{outline:3px solid var(--berry);outline-offset:3px}
 .item.worn{border:3px solid var(--leaf)}
 .item .ok{position:absolute;top:6px;left:6px}
 .item.shake{animation:shake .35s}
-@keyframes hop{0%,100%{transform:translateX(-50%) translateY(0)}40%{transform:translateX(-50%) translateY(-30px)}}
-@keyframes wag{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(14deg)}}
-@keyframes rise{to{transform:translateY(-130px) scale(1.4);opacity:0}}
-@keyframes eat{0%{transform:translateY(-150px) scale(1.2)}55%{transform:translateY(0) scale(1)}100%{transform:scale(0);opacity:0}}
-@media (prefers-reduced-motion:reduce){.dog.hop,.tail,.heart,.food,.item.shake{animation:none}}
-.setup label[for="kidName"],.setup legend{font-size:18px;color:var(--muted)}
-.setup #kidName{width:100%;box-sizing:border-box;font-family:var(--display);font-size:26px;border:2px solid var(--line);border-radius:14px;padding:10px 14px;color:var(--ink);background:var(--sky);text-align:center}
+.setup label[for="kidName"],.setup legend,.setup .lab{font-size:17px;color:var(--muted)}
+.setup #kidName{width:100%;box-sizing:border-box;font-family:var(--read);font-weight:700;font-size:30px;border:2px solid var(--line);border-radius:14px;padding:8px 14px;color:var(--ink);background:var(--sky);text-align:center}
 .setup fieldset{border:none;margin:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+.nikpad{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.nikpad button{min-width:44px;height:44px;border:2px solid var(--line);border-radius:10px;background:var(--paper);font-size:28px;line-height:1;padding:0 6px}
+.nikpad .clr{font-size:15px}
 .gpick{display:flex;gap:10px}
 .gpick input{position:absolute;opacity:0;width:1px;height:1px}
 .gpick label{font-family:var(--display);font-size:24px;border:2px solid var(--line);border-radius:999px;padding:10px 30px;cursor:pointer;background:var(--paper)}
 .gpick input:checked+label{background:var(--ink);color:#FFFFFF;border-color:var(--ink)}
 .gpick input:focus-visible+label{outline:3px solid var(--berry);outline-offset:3px}
+.wtok{font:inherit;color:inherit;background:none;border:none;padding:0 .05em;border-radius:12px;cursor:pointer;line-height:inherit}
+.wtok:hover{background:var(--note)}
+.sylg{display:inline-flex;gap:.15em;align-items:center;vertical-align:baseline;flex-wrap:wrap;justify-content:center}
+.syl{font:inherit;color:#93A3B1;background:var(--sky);border:2px dashed var(--line);border-radius:12px;padding:0 .12em;line-height:1.25;cursor:pointer}
+.syl.on{color:var(--ink);background:var(--note);border:2px solid var(--sun-deep)}
+.sylw{font-size:28px;border:none;background:none;padding:4px;line-height:1}
+.ptip{font-size:15px;color:var(--muted)}
+.judge{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.jbtn{border:none;border-radius:16px;padding:14px 22px;font-family:var(--display);font-size:22px;min-height:56px}
+.j-easy{background:var(--leaf);color:#FFFFFF}.j-slow{background:var(--sun);color:var(--ink)}.j-no{background:var(--sky);border:2px solid var(--line)}
+.res{display:flex;flex-direction:column;gap:10px;width:100%;max-width:600px;text-align:right}
+.res b{font-family:var(--display);font-weight:400;font-size:19px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border-radius:10px;padding:4px 10px;font-size:22px;font-weight:700;background:#DDF2E6;border:2px solid #9BD3B4}
+.chip.bad{background:#FBE1E8;border-color:#E9A3B6}
 .foot{font-size:14px;color:var(--muted);text-align:center;max-width:70ch;margin:0 auto;line-height:1.6}
-.overlay{position:fixed;inset:0;background:rgba(22,50,74,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20}
-.modal{background:var(--paper);border-radius:28px;padding:28px 24px;max-width:520px;width:100%;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;border:4px solid var(--sun)}
+.overlay{position:fixed;inset:0;background:rgba(22,50,74,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20;overflow:auto}
+.modal{background:var(--paper);border-radius:28px;padding:24px 20px;max-width:540px;width:100%;margin:auto;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;border:4px solid var(--sun)}
 .modal svg.big-medal{width:120px;height:120px}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:30;width:100%;height:100%}
 @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 @keyframes pop{0%{transform:scale(.8);opacity:.4}60%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
-@media (prefers-reduced-motion:reduce){.pop,.choice.wrong{animation:none}}
-@media (max-width:700px){.panel{grid-template-columns:1fr}.stages{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:520px){.choices{grid-template-columns:1fr}.stages{grid-template-columns:repeat(2,minmax(0,1fr))}.ltr{width:54px;height:66px}.ltr .g{font-size:30px}}
+@keyframes hop{0%,100%{transform:translateX(-50%) translateY(0)}40%{transform:translateX(-50%) translateY(-30px)}}
+@keyframes wag{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(14deg)}}
+@keyframes rise{to{transform:translateY(-130px) scale(1.4);opacity:0}}
+@keyframes eat{0%{transform:translateY(-150px) scale(1.2)}55%{transform:translateY(0) scale(1)}100%{transform:scale(0);opacity:0}}
+@media (prefers-reduced-motion:reduce){.pop,.choice.wrong,.dog.hop,.tail,.heart,.food,.item.shake,.pal.shake,.cobj.wrong{animation:none}}
+@media (max-width:700px){.stages{grid-template-columns:repeat(3,minmax(0,1fr))}.cgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.choices{grid-template-columns:1fr}.choices.two{grid-template-columns:1fr}.stages{grid-template-columns:repeat(2,minmax(0,1fr))}.ab{min-width:34px;height:38px;font-size:22px}.btn{padding:14px 22px;font-size:22px}}
 </style>
 <style>body{margin:0}img{max-width:100%}</style>
 </head>
@@ -180,20 +205,15 @@ button:focus-visible{outline:3px solid var(--berry);outline-offset:3px}
     </div>
   </header>
 
-  <div class="stages" id="stages" role="group" aria-label="שלבים"></div>
-
-  <section class="letters" aria-label="אותיות">
-    <div class="lab">האותיות של השלב · לחיצה על אות מראה את הצליל</div>
-    <div class="ltrs" id="newLetters"></div>
-    <div class="lab" id="oldLab">כבר למדנו</div>
-    <div class="ltrs" id="oldLetters"></div>
-  </section>
-
-  <div class="tabs" role="tablist" id="tabs"></div>
+  <section class="abc" id="abc" aria-label="האותיות שלמדנו"></section>
 
   <section class="card" id="card" aria-live="polite"></section>
 
-  <p class="foot">בכל שלב מתחילים ב"לומדים": אות חדשה עם מילים לדוגמה, ואותיות דומות זו ליד זו. מילים ומשפטים: הילד או הילדה קוראים בקול, וההורה לוחץ "קראתי!" או "ננסה שוב" (המילה חוזרת לסוף התור). את "מה בתמונה?" ו"איזו אות?" משחקים לבד. כשמסיימים את כל המשחקים בשלב מקבלים מדליה.</p>
+  <div class="tabs" role="tablist" id="tabs"></div>
+
+  <div class="stages" id="stages" role="group" aria-label="שלבים"></div>
+
+  <p class="foot">בכל שלב מתחילים ב"לומדים". במילים, משפטים וסיפור: הילד או הילדה קוראים בקול, וההורה לוחץ "קראתי!" או "ננסה שוב". מילה קשה? לוחצים עליה והיא מתחלקת להברות עם הקראה. את "מה בתמונה?", "איזו אות?" ו"צובעים" משחקים לבד. בסוף השלב עושים "מבחן": ההורה מסמן מה הלך בקלות, ו"אימון" מתרגל רק את מה שהיה קשה. כל תרגול עושים פעמיים (עם מילים אחרות) כדי לקבל ✓, וכשכל השלב מסומן מקבלים מדליה.</p>
 </div>
 
 <div class="overlay" id="overlay" hidden dir="rtl" lang="he">
@@ -212,7 +232,9 @@ button:focus-visible{outline:3px solid var(--berry);outline-offset:3px}
   <form class="modal setup" id="setupForm" aria-labelledby="setupTitle">
     <div class="win" id="setupTitle">מי קורא היום?</div>
     <label for="kidName">שם הילד או הילדה</label>
-    <input id="kidName" type="text" maxlength="20" required autocomplete="off">
+    <input id="kidName" type="text" maxlength="30" required autocomplete="off">
+    <div class="lab">ניקוד לשם (לא חובה): לוחצים בתוך השם מיד אחרי האות, ואז על הניקוד.</div>
+    <div class="nikpad" id="nikpad"></div>
     <fieldset>
       <legend>בן או בת? (כדי לכתוב "קורא" או "קוראת")</legend>
       <div class="gpick">
@@ -259,64 +281,81 @@ button:focus-visible{outline:3px solid var(--berry);outline-offset:3px}
 </div>
 
 <script>
-var KID = '', REAL = '', GEN = 'f';
+var STORE = "kria-share", DEFAULT_KID = null;
+var KID = '', REAL = '', LKID = '', GEN = 'f';
 function g(m,f){ return GEN==='m' ? m : f; }
 var STAGES;
 function buildContent(){
 STAGES = [
   { letters:[['א','silent'],['בּ','b'],['מ','m'],['ם','m (end)'],['ל','l'],['ה','h'],['י','y']],
-    tips:['ם (מם סופית) באה רק בסוף מילה.','א לא משמיעה צליל משלה. שומעים רק את הניקוד שלה.'],
-    words:['אַבָּא','אִמָּא','מִי','לִי','לָה','מָה','בָּא','בָּאָה','לָמָּה','מַיִם','הִיא','יָם','הֵם','אֵלֶּה'],
-    sent:['מִי בָּא? אַבָּא בָּא!','אִמָּא בָּאָה.','הִיא בַּיָּם.','הֵם בַּמַּיִם.','לָמָּה? לָמָּה לִי?'],
-    pics:[['💧','מַיִם'],['🌊','יָם'],['👨','אַבָּא'],['👩','אִמָּא']] },
+    words:['אַבָּא','אִמָּא','מִי','לִי','לָה','מָה','בָּא','בָּאָה','לָמָּה','מַיִם','הִיא','יָם','הֵם','אֵלֶּה','מָלֵא','אִם','הַיָּם','בָּאִים','לָהֶם'],
+    sent:['מִי בָּא? אַבָּא בָּא!','אִמָּא בָּאָה.','הִיא בַּיָּם.','הֵם בַּמַּיִם.','לָמָּה? לָמָּה לִי?','הַיָּם מָלֵא מַיִם.','מִי בַּמַּיִם? אִמָּא!','הֵם בָּאִים לַיָּם.','אַבָּא בַּיָּם, אִמָּא בַּיָּם.','לֹא, לֹא! הִיא בָּאָה!'],
+    pics:[['💧','מַיִם'],['🌊','יָם'],['👨','אַבָּא'],['👩','אִמָּא']],
+    story:{title:'אַבָּא בַּיָּם', pages:[['🏖️','אַבָּא בַּיָּם.'],['👩','אִמָּא בָּאָה.'],['🌊','מִי בַּמַּיִם?'],['👨🌊','אַבָּא בַּמַּיִם!'],['👩','אִמָּא בַּמַּיִם? לֹא!'],['👨👩🌊','הֵם בַּיָּם.']]} },
   { letters:[['שׁ','sh'],['ת','t'],['ד','d'],['ר','r'],['נ','n'],['ן','n (end)']],
-    tips:['שׁ: הנקודה מימין, הצליל sh.','ן (נון סופית) ארוכה, יורדת מתחת לשורה ובאה רק בסוף מילה.','ד מול ר: לד יש פינה חדה, לר פינה עגולה.'],
-    words:['שִׁיר','נֵר','שֶׁמֶשׁ','בַּיִת','יָד','שֵׁן','דֶּלֶת','מַתָּנָה','בָּנָנָה','אַרְיֵה','נָמֵר','בַּת','אֲנִי','יֵשׁ','שָׁר','תַּנִּין','שֵׁשׁ'],
-    sent:['יֵשׁ לִי מַתָּנָה!','הַשֶּׁמֶשׁ בַּשָּׁמַיִם.','אַרְיֵה בַּבַּיִת?','אַבָּא שָׁר לִי שִׁיר.','אֲנִי '+g('שָׁר','שָׁרָה')+' שִׁיר.'],
-    pics:[['☀️','שֶׁמֶשׁ'],['🕯️','נֵר'],['🏠','בַּיִת'],['✋','יָד'],['🦷','שֵׁן'],['🚪','דֶּלֶת'],['🎁','מַתָּנָה'],['🍌','בָּנָנָה'],['🦁','אַרְיֵה'],['🐅','נָמֵר'],['🐊','תַּנִּין']] },
+    words:['שִׁיר','נֵר','הַר','שָׁם','יָד','שֵׁן','בַּת','בֵּן','יֵשׁ','שָׁר','שֵׁשׁ','אַתְּ','אִישׁ','אֲנִי','בַּיִת','שֶׁמֶשׁ','דֶּלֶת','נָמֵר','נָהָר','דֶּשֶׁא','אַתָּה','אִשָּׁה','שֶׁלִּי','דִּירָה','שָׁמַיִם',{t:'מַתָּנָה',h:'מַ · תָּ · נָה'},{t:'בָּנָנָה',h:'בָּ · נָ · נָה'},{t:'אַרְיֵה',h:'אַרְ · יֵה'},{t:'תַּנִּין',h:'תַּ · נִּין'}],
+    sent:['יֵשׁ לִי מַתָּנָה!','הַשֶּׁמֶשׁ בַּשָּׁמַיִם.','אַרְיֵה בַּבַּיִת?','אַבָּא שָׁר לִי שִׁיר.','אֲנִי '+g('שָׁר','שָׁרָה')+' שִׁיר.','יֵשׁ דֶּשֶׁא בַּהַר.','אִמָּא שָׁרָה שִׁיר.','הַנָּמֵר נִרְדָּם.','מִי בַּבַּיִת? אֲנִי!','יְלָדִים בַּיָּם.','אַבָּא בַּבַּיִת, אִמָּא בַּבַּיִת.'],
+    pics:[['☀️','שֶׁמֶשׁ'],['🕯️','נֵר'],['🏠','בַּיִת'],['✋','יָד'],['🦷','שֵׁן'],['🚪','דֶּלֶת'],['🎁','מַתָּנָה'],['🍌','בָּנָנָה'],['🦁','אַרְיֵה'],['🐅','נָמֵר'],['🐊','תַּנִּין'],['⛰️','הַר']],
+    story:{title:'הַמַּתָּנָה', pages:[['🎁','יֵשׁ לִי מַתָּנָה.'],['🎁','מָה בַּמַּתָּנָה?'],['🍌','בָּנָנָה? לֹא.'],['🕯️','נֵר? לֹא.'],['🐊','תַּנִּין!'],['🐊🎵','הַתַּנִּין שָׁר לִי שִׁיר.']]} },
   { letters:[['וֹ','o'],['וּ','u'],['ו','v'],['ג','g'],['ק','k'],['פּ','p'],['כּ','k']],
-    tips:['ו מתחפשת: וֹ = o, וּ = u, ו בלי נקודה = v.','בּ מול כּ: לבּ יש זנב קטן בתחתית מימין, כּ עגולה.','ו מול ן: ו קצרה, ן ארוכה ויורדת מתחת לשורה.','ג מול נ: לג יש רגל קטנה משמאל.'],
-    words:['דָּג','גַּן','כַּדּוּר','פִּיל','גְּלִידָה','דֻּבִּי','גָּמָל','גָּדוֹל','שָׁלוֹם','תּוֹדָה','יוֹם','לַיְלָה','קֶשֶׁת','גֶּשֶׁם','כֶּתֶר','תּוּת','בְּרוֹקוֹלִי','בַּלּוֹן','קִפּוֹד','וֶרֶד','תְּמָנוּן',g('מְנַגֵּן','מְנַגֶּנֶת')],
-    sent:['שָׁלוֹם, דֻּבִּי!','הַפִּיל גָּדוֹל!','יֵשׁ דָּג בַּמַּיִם.','יֵשׁ קֶשֶׁת בַּשָּׁמַיִם.','תּוֹדָה, אִמָּא!','אֲנִי '+g('מְנַגֵּן','מְנַגֶּנֶת')+' שִׁיר.','בְּרוֹקוֹלִי? כֵּן, תּוֹדָה!','יֵשׁ לִי תּוּת גָּדוֹל!'],
-    pics:[['🐟','דָּג'],['⚽','כַּדּוּר'],['🐘','פִּיל'],['🍦','גְּלִידָה'],['🧸','דֻּבִּי'],['🐫','גָּמָל'],['🌈','קֶשֶׁת'],['🌧️','גֶּשֶׁם'],['👑','כֶּתֶר'],['🍓','תּוּת'],['🥦','בְּרוֹקוֹלִי'],['🎈','בַּלּוֹן'],['🦔','קִפּוֹד'],['🌹','וֶרֶד'],['🐙','תְּמָנוּן']] },
+    words:['דָּג','גַּן','גַּג','פֶּה','קָר','אוֹר','קוּם','יוֹם','גּוּר','דּוֹד','קִיר','כֵּן','פִּיל','תּוּת','וֶרֶד','גָּמָל','קֶשֶׁת','גֶּשֶׁם','כֶּתֶר','דֶּגֶל','גָּשָׁר','אָדֹם','יָרֹק','כָּתֹם','וָרֹד','דֻּבִּי','גָּדוֹל','שָׁלוֹם','תּוֹדָה','לִימוֹן','בַּלּוֹן',{t:'כַּדּוּר',h:'כַּ · דּוּר'},{t:'לַיְלָה',h:'לַיְ · לָה'},{t:'קִפּוֹד',h:'קִ · פּוֹד'},{t:'גְּלִידָה',h:'גְּלִי · דָה'},{t:'תְּמָנוּן',h:'תְּ · מָ · נוּן'},{t:g('מְנַגֵּן','מְנַגֶּנֶת'),h:g('מְ · נַ · גֵּן','מְ · נַ · גֶּ · נֶת')},{t:'בְּרוֹקוֹלִי',h:'בְּרוֹ · קוֹ · לִי'}],
+    sent:['שָׁלוֹם, דֻּבִּי!','הַפִּיל גָּדוֹל!','יֵשׁ דָּג בַּמַּיִם.','יֵשׁ קֶשֶׁת בַּשָּׁמַיִם.','תּוֹדָה, אִמָּא!','אֲנִי '+g('מְנַגֵּן','מְנַגֶּנֶת')+' שִׁיר.','בְּרוֹקוֹלִי? כֵּן, תּוֹדָה!','יֵשׁ לִי תּוּת גָּדוֹל!','הַגַּג שֶׁל הַבַּיִת אָדֹם.','יֵשׁ לִי כַּדּוּר וָרֹד.','הַדָּג גָּדוֹל!','יֵשׁ אוֹר בַּבַּיִת.','קוּם, דֻּבִּי! יֵשׁ גֶּשֶׁם!','הַפִּיל שָׁר שִׁיר.','יֵשׁ גָּשָׁר גָּדוֹל.'],
+    pics:[['🐟','דָּג'],['⚽','כַּדּוּר'],['🐘','פִּיל'],['🍦','גְּלִידָה'],['🧸','דֻּבִּי'],['🐫','גָּמָל'],['🌈','קֶשֶׁת'],['🌧️','גֶּשֶׁם'],['👑','כֶּתֶר'],['🍓','תּוּת'],['🥦','בְּרוֹקוֹלִי'],['🎈','בַּלּוֹן'],['🦔','קִפּוֹד'],['🌹','וֶרֶד'],['🐙','תְּמָנוּן'],['🍋','לִימוֹן'],['🌉','גָּשָׁר'],['🐶','גּוּר'],['🚩','דֶּגֶל']],
+    story:{title:'דֻּבִּי וְהַפִּיל', pages:[['🧸⚽','לְדֻבִּי יֵשׁ כַּדּוּר גָּדוֹל.'],['🐘','הַפִּיל בָּא.'],['🐘🧸','שָׁלוֹם, דֻּבִּי!'],['🧸⚽🐘','דֻּבִּי נוֹתֵן לַפִּיל אֶת הַכַּדּוּר.'],['🌧️','פִּתְאוֹם גֶּשֶׁם!'],['🌈','יֵשׁ קֶשֶׁת גְּדוֹלָה בַּשָּׁמַיִם.'],['🧸❤️🐘','תּוֹדָה, פִּיל! תּוֹדָה, דֻּבִּי!']]} },
   { letters:[['ס','s'],['ע','silent'],['צ','ts'],['ץ','ts (end)'],['ז','z'],['ח','kh'],['ט','t']],
-    tips:['ם מול ס: ם מרובעת ובאה רק בסוף מילה, ס עגולה.','ו מול ז: לז יש כובע.','ה מול ח: ח סגורה למעלה משני הצדדים.','פתח גנוב: כשח או ע בסוף מילה ויש מתחתיהן פתח, קוראים קודם a ואז את האות. לוּחַ = lu-akh.'],
-    words:['חָתוּל','עֵץ','סוּס',{t:'תַּפּוּחַ',h:'tapu-akh'},'זֶבְּרָה','עוּגָה','מָטוֹס','פֶּרַח','עַיִן','אֹזֶן',{t:'יָרֵחַ',h:'yare-akh'},{t:'לוּחַ',h:'lu-akh'},{t:'רוּחַ',h:'ru-akh'},'צִיּוּר','עִפָּרוֹן','פְּסַנְתֵּר','צִפּוֹר','חַלּוֹן','סַבָּא','שָׁעוֹן','פִּיצָה',{t:'פָּתוּחַ',h:'patu-akh'},'יוֹדֵעַ'],
-    sent:['הֶחָתוּל עַל הָעֵץ.','הַסּוּס רָץ מַהֵר.',KID+' '+g('מְנַגֵּן','מְנַגֶּנֶת')+' בַּפְּסַנְתֵּר.',KID+' '+g('מְצַיֵּר','מְצַיֶּרֶת')+' צִפּוֹר.',{t:'הַחַלּוֹן פָּתוּחַ.',h:'patu-akh'},{t:'הַיָּרֵחַ בַּשָּׁמַיִם.',h:'yare-akh'},'סַבָּא, אֲנִי '+g('רוֹצֶה','רוֹצָה')+' עוּגָה!',KID+' '+g('רוֹצֶה','רוֹצָה')+' תּוּתִים!'],
-    pics:[['🐈','חָתוּל'],['🌳','עֵץ'],['🐎','סוּס'],['🍎','תַּפּוּחַ'],['🦓','זֶבְּרָה'],['🎂','עוּגָה'],['✈️','מָטוֹס'],['🌸','פֶּרַח'],['👂','אֹזֶן'],['👁️','עַיִן'],['🌙','יָרֵחַ'],['🎹','פְּסַנְתֵּר'],['🎨','צִיּוּר'],['✏️','עִפָּרוֹן'],['🐦','צִפּוֹר'],['🍭','סֻכָּרִיָּה'],['🍕','פִּיצָה'],['🍐','אֲגַס'],['🦊','שׁוּעָל'],['⏰','שָׁעוֹן'],['🍊','תַּפּוּז'],['🍞','לֶחֶם'],['💨','רוּחַ'],['🥗','סָלָט']] },
+    words:['עֵץ','סוּס','חַם','סַל','עִיר','חוֹל','עֵז','חָג','סִיר','עוֹד','זֶה','עֵט','חֶדֶר','קָטָן','חָתוּל','עוּגָה','מָטוֹס','פֶּרַח','עַיִן','אֹזֶן','סַבָּא','פִּיצָה','יוֹדֵעַ',{t:'שָׁעוֹן',h:'שָׁ · עוֹן'},{t:'חַלּוֹן',h:'חַ · לּוֹן'},{t:'זֶבְּרָה',h:'זֶבְּ · רָה'},{t:'צִפּוֹר',h:'צִ · פּוֹר'},{t:'צִיּוּר',h:'צִי · יוּר'},{t:'עִפָּרוֹן',h:'עִ · פָּ · רוֹן'},{t:'לוּחַ',h:'לוּ + אַח'},{t:'רוּחַ',h:'רוּ + אַח'},{t:'יָרֵחַ',h:'יָרֵ + אַח'},{t:'תַּפּוּחַ',h:'תַּפּוּ + אַח'},{t:'פָּתוּחַ',h:'פָּתוּ + אַח'}],
+    sent:['הֶחָתוּל עַל הָעֵץ.','הַסּוּס רָץ מַהֵר.',KID+' '+g('מְצַיֵּר','מְצַיֶּרֶת')+' צִפּוֹר.',{t:'הַחַלּוֹן פָּתוּחַ.',h:'פָּתוּ + אַח'},{t:'הַיָּרֵחַ בַּשָּׁמַיִם.',h:'יָרֵ + אַח'},'סַבָּא, אֲנִי '+g('רוֹצֶה','רוֹצָה')+' עוּגָה!',KID+' '+g('רוֹצֶה','רוֹצָה')+' תּוּתִים!','הַחוֹל חַם.','יֵשׁ עֵז בַּחֶדֶר!','זֶה הַסִּיר שֶׁל סַבָּא.','הֶחָתוּל קָטָן.','עוֹד עוּגָה, סַבָּא!',{t:'יֵשׁ תַּפּוּחַ בַּסַּל.',h:'תַּפּוּ + אַח'}],
+    pics:[['🐈','חָתוּל'],['🌳','עֵץ'],['🐎','סוּס'],['🍎','תַּפּוּחַ'],['🦓','זֶבְּרָה'],['🎂','עוּגָה'],['✈️','מָטוֹס'],['🌸','פֶּרַח'],['👂','אֹזֶן'],['👁️','עַיִן'],['🌙','יָרֵחַ'],['🎨','צִיּוּר'],['✏️','עִפָּרוֹן'],['🐦','צִפּוֹר'],['🍭','סֻכָּרִיָּה'],['🍕','פִּיצָה'],['🍐','אֲגַס'],['🦊','שׁוּעָל'],['⏰','שָׁעוֹן'],['🍊','תַּפּוּז'],['🍞','לֶחֶם'],['💨','רוּחַ'],['🥗','סָלָט'],['🐐','עֵז'],['🏖️','חוֹל'],['🧺','סַל'],['🍲','סִיר']],
+    story:{title:'הֶחָתוּל וְהַצִּפּוֹר', pages:[['🐈🌳','חָתוּל קָטָן עוֹמֵד לְיַד הָעֵץ.'],['🐦🌳','עַל הָעֵץ יֵשׁ צִפּוֹר.'],['🐈','הֶחָתוּל רוֹצֶה לַעֲלוֹת.'],['🐦','הַצִּפּוֹר אוֹמֶרֶת: לֹא, לֹא!'],['🐦🍎','הַצִּפּוֹר זוֹרֶקֶת תַּפּוּחַ.'],['😺🐦','הֶחָתוּל וְהַצִּפּוֹר צוֹחֲקִים.']]} },
   { letters:[['ב','v'],['כ','kh'],['ך','kh (end)'],['פ','f'],['ף','f (end)'],['שׂ','s']],
-    tips:['אותן אותיות בלי הנקודה (דגש) נשמעות אחרת: בּ b → ב v, כּ k → כ kh, פּ p → פ f.','שׁ: נקודה מימין = sh. שׂ: נקודה משמאל = s.','ך ו־ף באות רק בסוף מילה. ך ארוכה ויורדת מתחת לשורה, כמו ן.'],
-    words:['כֶּלֶב','חָלָב','כּוֹכָב','קוֹף','צָב','דֹּב','לֵב',{t:'אֲבַטִּיחַ',h:'avati-akh'},'מִכְחוֹל',{t:'מַפְתֵּחַ',h:'mafte-akh'},'שִׂמְלָה',{t:'שָׂמֵחַ',h:'same-akh'},'מֶלֶךְ','דֶּרֶךְ','כַּף','עוֹף','סֵפֶר','רַכֶּבֶת','מְכוֹנִית','יָפֶה','אוֹהֶבֶת','גְּבִינָה','כֶּבֶשׂ'],
-    sent:[KID+' '+g('אוֹהֵב','אוֹהֶבֶת')+' תּוּתִים וּבְרוֹקוֹלִי.',KID+' '+g('מְצַיֵּר','מְצַיֶּרֶת')+' כֶּלֶב יָפֶה.','יֵשׁ לִי שִׂמְלָה יָפָה.','הַקּוֹף אוֹכֵל בָּנָנָה.',{t:'הַמֶּלֶךְ שָׂמֵחַ!',h:'same-akh'},{t:'בַּלַּיְלָה יֵשׁ יָרֵחַ וְכוֹכָבִים.',h:'yare-akh'},KID+' '+g('רוֹאֶה','רוֹאָה')+' כּוֹכָב.'],
-    pics:[['🐕','כֶּלֶב'],['🥛','חָלָב'],['⭐','כּוֹכָב'],['🐒','קוֹף'],['🐢','צָב'],['🐻','דֹּב'],['🍉','אֲבַטִּיחַ'],['🖌️','מִכְחוֹל'],['🔑','מַפְתֵּחַ'],['❤️','לֵב'],['👗','שִׂמְלָה'],['🤴','מֶלֶךְ'],['🥄','כַּף'],['📖','סֵפֶר'],['🚂','רַכֶּבֶת'],['🚗','מְכוֹנִית'],['🧀','גְּבִינָה'],['🐑','כֶּבֶשׂ'],['🍇','עֲנָבִים'],['🐸','צְפַרְדֵּעַ']] }
+    words:['לֵב','צָב','דֹּב','כַּף','אַף','עָף','עוֹף','קוֹף','כֶּלֶב','חָלָב','לָבָן','צָהֹב','עֶרֶב','מֶלֶךְ','דֶּרֶךְ','סֵפֶר','יָפֶה','כּוֹבַע','אֲבָל','שִׂמְלָה','כֶּבֶשׂ',{t:'זְאֵב',h:'זְ · אֵב'},{t:'כּוֹכָב',h:'כּוֹ · כָב'},{t:'סַבְתָּא',h:'סַבְ · תָּא'},{t:'גְּבִינָה',h:'גְּבִי · נָה'},{t:'רַכֶּבֶת',h:'רַ · כֶּ · בֶת'},{t:'מְכוֹנִית',h:'מְ · כוֹ · נִית'},{t:'מִכְחוֹל',h:'מִכְ · חוֹל'},{t:'אוֹהֶבֶת',h:'אוֹ · הֶ · בֶת'},{t:'פְּסַנְתֵּר',h:'פְּסַנְ · תֵּר'},{t:'שָׂמֵחַ',h:'שָׂמֵ + אַח'},{t:'מַפְתֵּחַ',h:'מַפְתֵּ + אַח'},{t:'אֲבַטִּיחַ',h:'אֲבַטִּי + אַח'}],
+    sent:[KID+' '+g('אוֹהֵב','אוֹהֶבֶת')+' תּוּתִים וּבְרוֹקוֹלִי.',KID+' '+g('מְצַיֵּר','מְצַיֶּרֶת')+' כֶּלֶב יָפֶה.','יֵשׁ לִי שִׂמְלָה יָפָה.','הַקּוֹף אוֹכֵל בָּנָנָה.',{t:'הַמֶּלֶךְ שָׂמֵחַ!',h:'שָׂמֵ + אַח'},{t:'בַּלַּיְלָה יֵשׁ יָרֵחַ וְכוֹכָבִים.',h:'יָרֵ + אַח'},KID+' '+g('רוֹאֶה','רוֹאָה')+' כּוֹכָב.',KID+' '+g('מְנַגֵּן','מְנַגֶּנֶת')+' בַּפְּסַנְתֵּר.','סַבְתָּא אוֹפָה עוּגָה.','הַזְּאֵב רָעֵב!','יֵשׁ לִי כּוֹבַע צָהֹב.','הַצִּפּוֹר עָפָה.','הַכֶּלֶב אוֹכֵל עֶצֶם.'],
+    pics:[['🐕','כֶּלֶב'],['🥛','חָלָב'],['⭐','כּוֹכָב'],['🐒','קוֹף'],['🐢','צָב'],['🐻','דֹּב'],['🍉','אֲבַטִּיחַ'],['🖌️','מִכְחוֹל'],['🔑','מַפְתֵּחַ'],['❤️','לֵב'],['👗','שִׂמְלָה'],['🤴','מֶלֶךְ'],['🥄','כַּף'],['📖','סֵפֶר'],['🚂','רַכֶּבֶת'],['🚗','מְכוֹנִית'],['🧀','גְּבִינָה'],['🐑','כֶּבֶשׂ'],['🍇','עֲנָבִים'],['🐸','צְפַרְדֵּעַ'],['🎹','פְּסַנְתֵּר'],['🐺','זְאֵב'],['👃','אַף'],['🎩','כּוֹבַע']],
+    story:{title:'הַכֶּלֶב', pages:[['🐕','יֵשׁ '+LKID+' כֶּלֶב קָטָן.'],['🐕⚽','הַכֶּלֶב אוֹהֵב לְשַׂחֵק בַּכַּדּוּר.'],['🐕🦴','הוּא אוֹכֵל עֶצֶם גְּדוֹלָה.'],['🌙🐕','בַּלַּיְלָה הַכֶּלֶב יָשֵׁן לְיַד הַמִּטָּה.'],['❤️',KID+' '+g('אוֹהֵב','אוֹהֶבֶת')+' אֶת הַכֶּלֶב,'],['🐕❤️','וְהַכֶּלֶב אוֹהֵב אֶת '+KID+'!']]} }
 ];
+buildLessons();
 }
-buildContent();
 
-/* Lessons: intro = new letter, pair = letters side by side, split = patach ganuv */
+/* Lessons: intro = new letter, pair = letters side by side, split / parent / quiz = patach ganuv, nikud = two-dot vowels */
+var LESSONS;
+function buildLessons(){
 var H_SAME='אוֹתוֹ צְלִיל!', H_LOOK='דּוֹמוֹת, אֲבָל שׁוֹנוֹת!', H_DAG='עִם נְקֻדָּה וּבְלִי נְקֻדָּה', END='בְּסוֹף מִלָּה', WD='עִם נְקֻדָּה', ND='בְּלִי נְקֻדָּה';
 function I(l,s,w){ return {t:'intro',l:l,s:s,w:w}; }
 function P(head,items){ return {t:'pair',head:head,items:items}; }
 function S(w,parts,more){ return {t:'split',w:w,parts:parts,more:more||[]}; }
-var LESSONS = [
+function Q(w,a){ return {t:'quiz',w:w,a:a}; }
+function N(shva,tsere){
+  return {t:'nikud', shva:shva, tsere:tsere,
+    text:'יש שני ניקודים שיש בהם שתי נקודות.\nשתי נקודות שוכבות, אחת ליד השנייה (◌ֵ) – זה צירה. הוא אומר e, כמו ב'+tsere[0]+'.\nשתי נקודות עומדות, אחת מעל השנייה (◌ְ) – זה שווא. השווא כמעט לא נשמע: מחברים את האות לאות שאחריה, כמו ב'+shva[0]+'.\nבתחילת מילה, לפעמים שומעים את השווא כמו e קטנה וקצרה.'};
+}
+var GANUV = {t:'parent', head:'פַּתָּח גָּנוּב', w:'לוּחַ',
+  text:g('תסתכל','תסתכלי')+' על המילה לוּחַ.\nבסוף המילה יש ח, ומתחתיה פתח – הקו הקטן שאומר "אַ".\nבדרך כלל קוראים קודם את האות ואחר כך את הניקוד שמתחתיה. אבל כשח נמצאת בסוף המילה ויש מתחתיה פתח, הפתח "גונב" את התור ונקרא לפני האות.\nלכן לא אומרים "לוּ-חַ", אלא "לוּ-אַח".\nבגלל זה קוראים לזה פתח גנוב! עכשיו בוא'+g('','י')+' נתרגל.'};
+LESSONS = [
   [ I('א','silent',['אַבָּא','אִמָּא']), I('בּ','b',['בָּא','אַבָּא']), I('מ','m',['מִי','מָה']), I('ל','l',['לִי','לָה']), I('ה','h',['הִיא','הֵם']), I('י','y',['יָם','מַיִם']),
     P(H_SAME,[['מ','m','מִי'],['ם','m','יָם',END]]) ],
   [ I('שׁ','sh',['שִׁיר','שֶׁמֶשׁ']), I('ת','t',['בַּת','תַּנִּין']), I('ד','d',['יָד','דֶּלֶת']), I('ר','r',['נֵר','שִׁיר']), I('נ','n',['נֵר','נָמֵר']),
     P(H_SAME,[['נ','n','נָמֵר'],['ן','n','שֵׁן',END]]), P(H_LOOK,[['ד','d','יָד'],['ר','r','נֵר']]), P(H_LOOK,[['ה','h','הֵם'],['ת','t','בַּת']]) ],
   [ P('ו אַחַת, שְׁלוֹשָׁה צְלִילִים',[['וֹ','o','שָׁלוֹם'],['וּ','u','תּוּת'],['ו','v','וֶרֶד']]),
     I('ג','g',['דָּג','גַּן']), I('ק','k',['קֶשֶׁת','קִפּוֹד']), I('פּ','p',['פִּיל','קִפּוֹד']), I('כּ','k',['כַּדּוּר','כֶּתֶר']),
-    P(H_SAME,[['כּ','k','כֶּתֶר'],['ק','k','קֶשֶׁת']]), P(H_LOOK,[['בּ','b','בַּלּוֹן'],['כּ','k','כַּדּוּר']]), P(H_LOOK,[['ו','v','וֶרֶד'],['ן','n','גַּן']]), P(H_LOOK,[['ג','g','גַּן'],['נ','n','נֵר']]) ],
-  [ I('ס','s',['סוּס','סַבָּא']), P(H_LOOK,[['ם','m','יָם'],['ס','s','סוּס']]),
+    P(H_SAME,[['כּ','k','כֶּתֶר'],['ק','k','קֶשֶׁת']]), P(H_LOOK,[['בּ','b','בַּלּוֹן'],['כּ','k','כַּדּוּר']]), P(H_LOOK,[['ו','v','וֶרֶד'],['ן','n','גַּן']]), P(H_LOOK,[['ג','g','גַּן'],['נ','n','נֵר']]),
+    N(['גְּלִידָה','בְּרוֹקוֹלִי'],['נֵר','שֵׁן']) ],
+  [ N(['לְיַד','זֶבְּרָה'],['עֵץ','עֵז']),
+    I('ס','s',['סוּס','סַבָּא']), P(H_LOOK,[['ם','m','יָם'],['ס','s','סוּס']]),
     I('ע','silent',['עֵץ','עוּגָה']), P(H_SAME,[['א','silent','אִמָּא'],['ע','silent','עוּגָה']]),
     I('צ','ts',['צִפּוֹר','צִיּוּר']), P(H_SAME,[['צ','ts','צִפּוֹר'],['ץ','ts','עֵץ',END]]),
     I('ז','z',['זֶבְּרָה','תַּפּוּז']), P(H_LOOK,[['ו','v','וֶרֶד'],['ז','z','זֶבְּרָה']]),
     I('ח','kh',['חָתוּל','לֶחֶם']), P(H_LOOK,[['ה','h','הִיא'],['ח','kh','חָתוּל'],['ת','t','תּוּת']]),
     I('ט','t',['מָטוֹס','סָלָט']), P(H_SAME,[['ט','t','סָלָט'],['ת','t','תּוּת']]),
-    S('לוּחַ',['לוּ','אַח'],[['רוּחַ','רוּ','אַח'],['יָרֵחַ','יָרֵ','אַח'],['תַּפּוּחַ','תַּפּוּ','אַח'],['פָּתוּחַ','פָּתוּ','אַח']]) ],
-  [ P(H_DAG,[['בּ','b','בַּיִת',WD],['ב','v','כֶּלֶב',ND]]), P(H_DAG,[['כּ','k','כַּדּוּר',WD],['כ','kh','מְכוֹנִית',ND]]), P(H_SAME,[['כ','kh','מְכוֹנִית'],['ך','kh','מֶלֶךְ',END]]),
+    GANUV, S('לוּחַ',['לוּ','אַח'],[['רוּחַ','רוּ','אַח'],['יָרֵחַ','יָרֵ','אַח'],['תַּפּוּחַ','תַּפּוּ','אַח'],['פָּתוּחַ','פָּתוּ','אַח']]),
+    Q('רוּחַ','רוּ'), Q('יָרֵחַ','יָרֵ'), Q('תַּפּוּחַ','תַּפּוּ'), Q('פָּתוּחַ','פָּתוּ') ],
+  [ N(['פְּסַנְתֵּר','זְאֵב'],['לֵב','סֵפֶר']),
+    P(H_DAG,[['בּ','b','בַּיִת',WD],['ב','v','כֶּלֶב',ND]]), P(H_DAG,[['כּ','k','כַּדּוּר',WD],['כ','kh','מְכוֹנִית',ND]]), P(H_SAME,[['כ','kh','מְכוֹנִית'],['ך','kh','מֶלֶךְ',END]]),
     P(H_DAG,[['פּ','p','פִּיל',WD],['פ','f','סֵפֶר',ND]]), P(H_SAME,[['פ','f','סֵפֶר'],['ף','f','קוֹף',END]]),
-    P('אֵיפֹה הַנְּקֻדָּה?',[['שׁ','sh','שֶׁמֶשׁ','נְקֻדָּה מִיָּמִין'],['שׂ','s','שִׂמְלָה','נְקֻדָּה מִשְּׂמֹאל']]), P(H_SAME,[['שׂ','s','שִׂמְלָה'],['ס','s','סוּס']]), P(H_LOOK,[['ר','r','נֵר'],['ך','kh','מֶלֶךְ']]) ]
+    P('אֵיפֹה הַנְּקֻדָּה?',[['שׁ','sh','שֶׁמֶשׁ','נְקֻדָּה מִיָּמִין'],['שׂ','s','שִׂמְלָה','נְקֻדָּה מִשְּׂמֹאל']]), P(H_SAME,[['שׂ','s','שִׂמְלָה'],['ס','s','סוּס']]), P(H_LOOK,[['ר','r','נֵר'],['ך','kh','מֶלֶךְ']]),
+    Q('שָׂמֵחַ','שָׂמֵ'), Q('מַפְתֵּחַ','מַפְתֵּ') ]
 ];
+}
+buildContent();
 
 /* Highlight a letter inside a word (dagesh / shin dot / vav marks count where they change the sound) */
 var KM = {'ב':'ּ','כ':'ּ','פ':'ּ','ש':'ׁׂ','ו':'ֹּ'};
@@ -327,64 +366,91 @@ function hlWord(w, target){
   clusters(w).forEach(function(c){ var m = c[0]===target[0] && keyMarks(c)===keyMarks(target); box.appendChild(el('span', m?'hl':null, c)); });
   return box;
 }
+function hlMark(w, mark){
+  var box = el('span');
+  clusters(w).forEach(function(c){ box.appendChild(el('span', c.indexOf(mark)>0 ? 'hl' : null, c)); });
+  return box;
+}
+/* difficulty: letters + extra weight for sheva (hard clusters) */
+function score(t){ var n=0, sh=0; Array.from(t).forEach(function(ch){ if (/[א-ת]/.test(ch)) n++; if (/[ְ-ֳ]/.test(ch)) sh++; }); return n + sh*1.5; }
 
 /* Look-alike letter groups. s = stage (0-based) from which all letters are known. */
 var GROUPS = [
-  {s:1, items:[['ד','d'],['ר','r']], tip:'ד: פינה חדה · ר: פינה עגולה'},
-  {s:1, items:[['ה','h'],['ת','t']], tip:'ה: רווח קטן למעלה משמאל · ת: רגל למטה משמאל'},
-  {s:2, items:[['ו','o / u / v'],['ן','n (end)']], tip:'ו: קצרה · ן: ארוכה, יורדת מתחת לשורה, רק בסוף מילה'},
-  {s:2, items:[['בּ','b'],['כּ','k']], tip:'בּ: זנב קטן בתחתית מימין · כּ: עגולה, בלי זנב'},
-  {s:2, items:[['ג','g'],['נ','n']], tip:'ג: רגל קטנה משמאל · נ: בסיס ישר'},
-  {s:2, items:[['ה','h'],['ק','k']], tip:'ק: הרגל יורדת מתחת לשורה'},
-  {s:3, items:[['ם','m (end)'],['ס','s']], tip:'ם: מרובעת, רק בסוף מילה · ס: עגולה'},
-  {s:3, items:[['ו','o / u / v'],['ז','z'],['ן','n (end)']], tip:'ז: עם כובע · ן: יורדת מתחת לשורה'},
-  {s:3, items:[['ה','h'],['ח','kh'],['ת','t']], tip:'ח: סגורה למעלה · ה: רווח משמאל · ת: רגל משמאל'},
-  {s:3, items:[['ע','silent'],['צ','ts']], tip:'צ: בסיס ישר למטה · ע: זנב באלכסון'},
-  {s:3, items:[['ט','t'],['מ','m']], tip:'ט: פתוחה למעלה · מ: פתח קטן למטה'},
-  {s:4, items:[['בּ','b'],['ב','v']], tip:'עם נקודה: b · בלי נקודה: v'},
-  {s:4, items:[['כּ','k'],['כ','kh']], tip:'עם נקודה: k · בלי נקודה: kh'},
-  {s:4, items:[['פּ','p'],['פ','f']], tip:'עם נקודה: p · בלי נקודה: f'},
-  {s:4, items:[['שׁ','sh'],['שׂ','s']], tip:'נקודה מימין: sh · נקודה משמאל: s'},
-  {s:4, items:[['ד','d'],['ך','kh (end)'],['ר','r']], tip:'ך: ארוכה, יורדת מתחת לשורה, רק בסוף מילה'}
+  {s:1, items:[['ד','d'],['ר','r']]},
+  {s:1, items:[['ה','h'],['ת','t']]},
+  {s:2, items:[['ו','o / u / v'],['ן','n (end)']]},
+  {s:2, items:[['בּ','b'],['כּ','k']]},
+  {s:2, items:[['ג','g'],['נ','n']]},
+  {s:2, items:[['ה','h'],['ק','k']]},
+  {s:3, items:[['ם','m (end)'],['ס','s']]},
+  {s:3, items:[['ו','o / u / v'],['ז','z'],['ן','n (end)']]},
+  {s:3, items:[['ה','h'],['ח','kh'],['ת','t']]},
+  {s:3, items:[['ע','silent'],['צ','ts']]},
+  {s:3, items:[['ט','t'],['מ','m']]},
+  {s:4, items:[['בּ','b'],['ב','v']]},
+  {s:4, items:[['כּ','k'],['כ','kh']]},
+  {s:4, items:[['פּ','p'],['פ','f']]},
+  {s:4, items:[['שׁ','sh'],['שׂ','s']]},
+  {s:4, items:[['ד','d'],['ך','kh (end)'],['ר','r']]}
 ];
 
-var PRAISE = ['יוֹפִי!','מְצֻיָּן!','כָּל הַכָּבוֹד!','אַלּוּפָה!','אֵיזוֹ קוֹרֵאת!','נֶהֱדָר!','בְּדִיּוּק!'];
-var MODES = [['learn','לומדים'],['words','מילים'],['sent','משפטים'],['pic','מה בתמונה?'],['ltr','איזו אות?']];
-var DONE_NAME = {learn:'הַשִּׁעוּר',words:'הַמִּלִּים',sent:'הַמִּשְׁפָּטִים',pic:'הַתְּמוּנוֹת',ltr:'הָאוֹתִיּוֹת'};
+/* Coloring: read "the X is <color>" and paint it */
+var COBJ = [
+  {id:'house', n:'הַבַּיִת', s:2, svg:'<path class="fz" d="M50 95 L150 22 L250 95 Z"/><rect class="fz" x="72" y="95" width="156" height="90"/><rect x="132" y="128" width="36" height="57" fill="#FFFFFF" stroke="#16324A" stroke-width="4"/>'},
+  {id:'fish', n:'הַדָּג', s:2, svg:'<path class="fz" d="M212 100 L272 58 L272 142 Z"/><ellipse class="fz" cx="140" cy="100" rx="82" ry="50"/><circle cx="98" cy="88" r="10" fill="#FFFFFF" stroke="#16324A" stroke-width="3"/><circle cx="96" cy="88" r="4" fill="#16324A"/><path class="ln" d="M150 80 q14 20 0 40"/>'},
+  {id:'ball', n:'הַכַּדּוּר', s:2, svg:'<circle class="fz" cx="150" cy="100" r="78"/><path class="ln" d="M72 100 h156 M150 22 v156"/><path class="ln" d="M95 45 q55 55 0 110 M205 45 q-55 55 0 110"/>'},
+  {id:'balloon', n:'הַבַּלּוֹן', s:2, svg:'<path class="ln" d="M150 160 q-14 18 4 36"/><ellipse class="fz" cx="150" cy="80" rx="58" ry="70"/><path class="fz" d="M141 162 L159 162 L150 150 Z"/>'},
+  {id:'tree', n:'הָעֵץ', s:3, svg:'<rect x="134" y="118" width="32" height="70" fill="#8B5A2B" stroke="#16324A" stroke-width="4"/><circle class="fz" cx="105" cy="100" r="38"/><circle class="fz" cx="195" cy="100" r="38"/><circle class="fz" cx="150" cy="70" r="52"/>'},
+  {id:'flower', n:'הַפֶּרַח', s:3, svg:'<rect x="146" y="105" width="8" height="90" fill="#2E9E4F"/><circle class="fz" cx="186" cy="78" r="26"/><circle class="fz" cx="168" cy="109" r="26"/><circle class="fz" cx="132" cy="109" r="26"/><circle class="fz" cx="114" cy="78" r="26"/><circle class="fz" cx="132" cy="47" r="26"/><circle class="fz" cx="168" cy="47" r="26"/><circle cx="150" cy="78" r="22" fill="#FFFFFF" stroke="#16324A" stroke-width="4"/>'}
+];
+var CCOL = [
+  {n:'אָדֹם', c:'#E5383B', s:2}, {n:'כָּתֹם', c:'#F5891F', s:2}, {n:'יָרֹק', c:'#2E9E4F', s:2}, {n:'וָרֹד', c:'#F27BB0', s:2},
+  {n:'כָּחֹל', c:'#2F6FD6', s:3}, {n:'סָגֹל', c:'#8E4FD0', s:3}, {n:'חוּם', c:'#8B5A2B', s:3}, {n:'צָהֹב', c:'#F6C318', s:4}
+];
+
+var MODES = [['learn','לומדים'],['words','מילים'],['sent','משפטים'],['story','סיפור'],['pic','מה בתמונה?'],['ltr','איזו אות?'],['color','צובעים'],['test','מבחן'],['focus','אימון']];
+var NEED = {learn:1, story:1, color:1, words:2, sent:2, pic:2, ltr:2, test:1, focus:1};
+var DONE_NAME = {learn:'הַשִּׁעוּר',words:'הַמִּלִּים',sent:'הַמִּשְׁפָּטִים',pic:'הַתְּמוּנוֹת',ltr:'הָאוֹתִיּוֹת',story:'הַסִּפּוּר',color:'הַצִּיּוּר',test:'הַמִּבְחָן',focus:'הָאִמּוּן'};
 var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg>';
 var MEDAL = '<svg class="medal" viewBox="0 0 64 64" aria-label="שלב הושלם" role="img"><circle cx="32" cy="32" r="28" fill="#F6B819" stroke="#B07A00" stroke-width="3"/><path d="M32 16l4.7 9.6 10.6 1.5-7.7 7.4 1.8 10.5L32 40l-9.4 5 1.8-10.5-7.7-7.4 10.6-1.5z" fill="#FFFFFF"/></svg>';
 var CHECK = '<span class="ok" aria-label="הושלם"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.5 2.5L10 3"/></svg></span>';
 
-var state = { stage:0, mode:'learn', hist:[], queue:[], total:0, done:0, stars:0, mistakes:0, roundStars:0, praise:'', completed:{}, celebrated:{} };
+var state = { stage:0, mode:'learn', hist:[], queue:[], total:0, done:0, stars:0, mistakes:0, roundStars:0, completed:{}, celebrated:{}, rounds:{}, seen:{}, fills:{}, sel:null, tested:{}, weak:{}, res:{} };
 try {
-  var s = JSON.parse(localStorage.getItem('kria-share') || localStorage.getItem('kria') || '{}');
+  var s = JSON.parse(localStorage.getItem(STORE) || localStorage.getItem('kria') || '{}');
   if (s.stars) state.stars = s.stars;
   if (s.stage != null && s.stage < STAGES.length) state.stage = s.stage;
   if (s.completed) state.completed = s.completed;
   if (s.celebrated) state.celebrated = s.celebrated;
+  if (s.rounds) state.rounds = s.rounds;
+  if (s.seen) state.seen = s.seen;
+  if (s.tested) state.tested = s.tested;
+  if (s.weak) state.weak = s.weak;
   if (s.dog) state.dog = s.dog;
   if (s.muted) state.muted = true;
   if (s.kid) state.kid = s.kid;
 } catch(e) {}
+if (!state.kid && DEFAULT_KID) state.kid = DEFAULT_KID;
 function applyKid(){
   GEN = state.kid && state.kid.g==='m' ? 'm' : 'f';
   REAL = state.kid && state.kid.name ? state.kid.name.trim() : '';
   KID = REAL || g('הַיֶּלֶד','הַיַּלְדָּה');
+  LKID = REAL ? 'לְ'+REAL : g('לַיֶּלֶד','לַיַּלְדָּה');
   buildContent();
 }
 applyKid();
 if (!state.dog) state.dog = {owned:[], wear:{}, name:''};
-function save(){ try { localStorage.setItem('kria-share', JSON.stringify({stars:state.stars, stage:state.stage, completed:state.completed, celebrated:state.celebrated, dog:state.dog, muted:!!state.muted, kid:state.kid})); } catch(e) {} }
+function save(){ try { localStorage.setItem(STORE, JSON.stringify({stars:state.stars, stage:state.stage, completed:state.completed, celebrated:state.celebrated, rounds:state.rounds, seen:state.seen, tested:state.tested, weak:state.weak, dog:state.dog, muted:!!state.muted, kid:state.kid})); } catch(e) {} }
 
 /* ---------- sound ---------- */
 var AC = null;
 function ac(){ if (!AC){ try { AC = new (window.AudioContext||window.webkitAudioContext)(); } catch(e) {} } if (AC && AC.state==='suspended') AC.resume(); return AC; }
 function tone(f,t0,dur,type,vol,f2){
   var a = ac(); if (!a || state.muted) return;
-  var o = a.createOscillator(), g = a.createGain(), t = a.currentTime+t0;
+  var o = a.createOscillator(), gn = a.createGain(), t = a.currentTime+t0;
   o.type = type||'sine'; o.frequency.setValueAtTime(f,t); if (f2) o.frequency.exponentialRampToValueAtTime(f2,t+dur);
-  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol||0.2,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-  o.connect(g); g.connect(a.destination); o.start(t); o.stop(t+dur+0.05);
+  gn.gain.setValueAtTime(0.0001,t); gn.gain.exponentialRampToValueAtTime(vol||0.2,t+0.02); gn.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(gn); gn.connect(a.destination); o.start(t); o.stop(t+dur+0.05);
 }
 function sfx(k){
   if (k==='yes'){ tone(880,0,.14,'sine',.22); tone(1320,.09,.28,'sine',.22); }
@@ -394,6 +460,7 @@ function sfx(k){
   else if (k==='bark'){ tone(560,0,.11,'sawtooth',.12,280); tone(600,.17,.11,'sawtooth',.12,300); }
   else if (k==='buy'){ [1047,1319,1568,2093].forEach(function(f,i){ tone(f,i*.07,.16,'sine',.16); }); }
   else if (k==='munch'){ for (var i=0;i<4;i++) tone(170+Math.random()*60,.5+i*.13,.07,'square',.07); }
+  else if (k==='paint'){ tone(660,0,.1,'sine',.15,990); }
 }
 function renderMute(){
   var b = document.getElementById('muteBtn');
@@ -407,12 +474,26 @@ function el(tag, cls, txt){ var e=document.createElement(tag); if(cls) e.classNa
 function norm(x){ return typeof x==='string' ? {t:x} : x; }
 function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
 
-function groupsFor(stage){ return GROUPS.filter(function(g){ return g.s<=stage; }); }
-function modesFor(stage){ return MODES.filter(function(m){ return m[0]!=='ltr' || groupsFor(stage).length; }).map(function(m){ return m[0]; }); }
-function isDone(stage, mode){ return (state.completed[stage]||[]).indexOf(mode) >= 0; }
-function stageDone(stage){ return modesFor(stage).every(function(m){ return isDone(stage,m); }); }
+function groupsFor(stage){ return GROUPS.filter(function(gr){ return gr.s<=stage; }); }
+function weakOf(stage){ return (state.weak[stage] && state.weak[stage].items) || []; }
+function modesFor(stage){ return MODES.filter(function(m){ if (m[0]==='ltr') return groupsFor(stage).length>0; if (m[0]==='color') return stage>=2; if (m[0]==='focus') return !!state.tested[stage] && weakOf(stage).length>0; return true; }).map(function(m){ return m[0]; }); }
+function roundsOf(stage, mode){ return (state.rounds[stage] && state.rounds[stage][mode]) || 0; }
+function isDone(stage, mode){ if (mode==='test') return !!state.tested[stage]; if (mode==='focus') return !!state.tested[stage] && !weakOf(stage).length; return (state.completed[stage]||[]).indexOf(mode) >= 0 || roundsOf(stage,mode) >= NEED[mode]; }
+function stageDone(stage){ return !!state.celebrated[stage] || modesFor(stage).every(function(m){ return isDone(stage,m); }); }
 
-/* ---------- top panels ---------- */
+/* pick n items, preferring ones not seen in earlier rounds */
+function pickFresh(pool, n, key){
+  var k = state.stage+':'+state.mode+':'+key, seen = state.seen[k] || [];
+  function id(x){ return Array.isArray(x) ? x[1] : norm(x).t; }
+  var fresh = shuffle(pool.filter(function(x){ return seen.indexOf(id(x))<0; }));
+  var old = shuffle(pool.filter(function(x){ return seen.indexOf(id(x))>=0; }));
+  var out = fresh.slice(0,n);
+  if (out.length < n){ out = out.concat(old.slice(0, n-out.length)); seen = []; }
+  state.seen[k] = seen.concat(out.map(id));
+  return out;
+}
+
+/* ---------- top / bottom panels ---------- */
 function renderStages(){
   var box = document.getElementById('stages'); box.innerHTML='';
   STAGES.forEach(function(st,i){
@@ -426,21 +507,17 @@ function renderStages(){
   });
 }
 
-function letterBtn(l, old){
-  var b = el('button','ltr'+(old?' old':''));
-  b.setAttribute('aria-label', l[0]);
-  b.appendChild(el('span','g',l[0]));
-  var s = el('span','s',''); b.appendChild(s);
-  b.onclick = function(){ s.textContent = s.textContent ? '' : l[1]; };
-  return b;
-}
-
-function renderLetters(){
-  var n = document.getElementById('newLetters'), o = document.getElementById('oldLetters');
-  n.innerHTML=''; o.innerHTML='';
-  STAGES[state.stage].letters.forEach(function(l){ n.appendChild(letterBtn(l,false)); });
-  for (var i=0;i<state.stage;i++) STAGES[i].letters.forEach(function(l){ o.appendChild(letterBtn(l,true)); });
-  document.getElementById('oldLab').hidden = state.stage===0;
+function renderAbc(){
+  var box = document.getElementById('abc'); box.innerHTML='';
+  for (var i=0;i<=state.stage;i++) STAGES[i].letters.forEach(function(l){
+    var b = el('button','ab'+(i===state.stage?' new':''), l[0]); b.setAttribute('aria-label', l[0]);
+    b.onclick = function(){
+      var open = b.querySelector('.snd');
+      box.querySelectorAll('.snd').forEach(function(x){ x.remove(); });
+      if (!open) b.appendChild(el('span','snd',l[1]));
+    };
+    box.appendChild(b);
+  });
 }
 
 function renderTabs(){
@@ -451,7 +528,9 @@ function renderTabs(){
     var t = el('button','tab'); t.id='tab-'+m[0]; t.setAttribute('role','tab');
     t.setAttribute('aria-selected', m[0]===state.mode ? 'true':'false');
     t.appendChild(el('span',null,m[1]));
+    var r = roundsOf(state.stage,m[0]);
     if (isDone(state.stage,m[0])) t.insertAdjacentHTML('beforeend', CHECK);
+    else if (r>0) t.appendChild(el('span','part', r+'/'+NEED[m[0]]));
     t.onclick = function(){ state.mode=m[0]; renderTabs(); startRound(); };
     box.appendChild(t);
   });
@@ -462,24 +541,42 @@ function prevPool(key){ var out=[]; for (var i=0;i<state.stage;i++) out = out.co
 
 function letterQuestions(){
   var cur = [], old = [];
-  groupsFor(state.stage).forEach(function(g){
-    g.items.forEach(function(it){ (g.s===state.stage ? cur : old).push({g:g, l:it[0], snd:it[1]}); });
+  groupsFor(state.stage).forEach(function(gr){
+    gr.items.forEach(function(it){ (gr.s===state.stage ? cur : old).push({g:gr, l:it[0], snd:it[1]}); });
   });
   var q = shuffle(cur).slice(0,8);
   q = q.concat(shuffle(old).slice(0, Math.max(3, 10-q.length)));
   return shuffle(q);
 }
 
+/* easy words first, at most two hard ones, placed last */
+function easyFirst(items){
+  var sorted = items.map(function(x){ return {x:x, s:score(norm(x).t)+Math.random()*.6}; }).sort(function(a,b){ return a.s-b.s; });
+  var easy = sorted.filter(function(o){ return o.s<7; }), hard = sorted.filter(function(o){ return o.s>=7; }).slice(0,2);
+  return easy.concat(hard).map(function(o){ return o.x; });
+}
+
+function colorRound(){
+  var objs = shuffle(COBJ.filter(function(o){ return o.s<=state.stage; }));
+  var cols = shuffle(CCOL.filter(function(c){ return c.s<=state.stage; }));
+  return objs.map(function(o,i){ return {o:o, c:cols[i % cols.length]}; });
+}
+
 function startRound(){
   var st = STAGES[state.stage], items;
-  state.hist = [];
+  state.hist = []; state.fills = {}; state.sel = null;
   if (state.mode==='learn') items = LESSONS[state.stage].slice();
-  else if (state.mode==='words') items = shuffle(st.words).slice(0,10).concat(shuffle(prevPool('words')).slice(0,3));
-  else if (state.mode==='sent') items = shuffle(st.sent).slice(0,6).concat(shuffle(prevPool('sent')).slice(0,2));
-  else if (state.mode==='pic') items = shuffle(st.pics).slice(0,8).concat(shuffle(prevPool('pics')).slice(0, state.stage ? 2 : 0));
+  else if (state.mode==='words') items = easyFirst(pickFresh(st.words, 10, 'w').concat(shuffle(prevPool('words')).slice(0,3)));
+  else if (state.mode==='sent') items = pickFresh(st.sent, 6, 's').concat(shuffle(prevPool('sent')).slice(0,2)).sort(function(a,b){ return norm(a).t.length - norm(b).t.length; });
+  else if (state.mode==='pic') items = shuffle(pickFresh(st.pics, 8, 'p').concat(shuffle(prevPool('pics')).slice(0, state.stage ? 2 : 0)));
+  else if (state.mode==='story') items = st.story.pages.map(function(p,i){ return {pic:p[0], t:p[1], first:i===0}; });
+  else if (state.mode==='color') items = colorRound();
+  else if (state.mode==='test'){ items = testItems(); state.res = {}; }
+  else if (state.mode==='focus') items = focusItems();
   else items = letterQuestions();
-  state.queue = state.mode==='learn' ? items : shuffle(items); state.total = state.queue.length; state.done = 0;
-  state.mistakes = 0; state.roundStars = 0; state.praise = '';
+  state.queue = items; state.total = items.length; state.done = 0;
+  state.mistakes = 0; state.roundStars = 0;
+  save();
   renderCard();
 }
 
@@ -512,7 +609,8 @@ function progress(){
   return p;
 }
 
-function next(){ state.queue.shift(); state.done++; renderCard(); }
+function next(){ state.hist.push(state.queue.shift()); state.done++; renderCard(); }
+function back(){ if (!state.hist.length) return; state.queue.unshift(state.hist.pop()); state.done--; renderCard(); }
 
 function renderCard(){
   var card = document.getElementById('card'); card.innerHTML='';
@@ -522,21 +620,49 @@ function renderCard(){
   if (state.mode==='learn') return renderLesson(card, item);
   if (state.mode==='pic') return renderPic(card, item);
   if (state.mode==='ltr') return renderLtr(card, item);
+  if (state.mode==='story') return renderStory(card, item);
+  if (state.mode==='color') return renderColor(card, item);
+  if (state.mode==='test') return renderTest(card, item);
   item = norm(item);
-  card.appendChild(el('div', (state.mode==='sent'?'sent':'big')+' pop', item.t));
+  if (state.mode==='focus') card.appendChild(el('div','ask','מְתַרְגְּלִים: '+item.label));
+  card.appendChild(readable(item.t, (state.mode==='sent'?'sent':'big')+' pop'));
   var acts = el('div','acts');
   var yes = el('button','btn yes','קָרָאתִי!'); yes.id='btn-read';
   var re = el('button','btn again','נְנַסֶּה שׁוּב'); re.id='btn-retry';
-  yes.onclick = function(){ reward(yes); next(); };
+  yes.onclick = function(){ if (state.mode==='focus') focusHit(item.key); reward(yes); next(); };
   re.onclick = function(){ state.mistakes++; state.queue.push(state.queue.shift()); renderCard(); };
   acts.appendChild(yes); acts.appendChild(re);
-  if (item.h){
+  if (item.h && item.h.indexOf('+')>0){
     var hb = el('button','btn hintb','רֶמֶז'); hb.id='btn-hint';
     hb.onclick = function(){ hb.replaceWith(el('div','hint pop',item.h)); };
     acts.appendChild(hb);
   }
   card.appendChild(acts);
+  card.appendChild(el('div','ptip','מילה קשה? לוחצים עליה והיא מתחלקת להברות.'));
 }
+
+function renderStory(card, p){
+  if (p.first) card.appendChild(el('div','lhead', STAGES[state.stage].story.title));
+  card.appendChild(el('div','spic pop', p.pic));
+  card.appendChild(readable(p.t, 'sent'));
+  var acts = el('div','acts');
+  var yes = el('button','btn yes','קָרָאתִי!'); yes.id='btn-read';
+  yes.onclick = function(){ reward(yes); next(); };
+  var pv = el('button','btn again','הַקּוֹדֵם'); pv.id='btn-story-prev'; pv.disabled = !state.hist.length; pv.onclick = back;
+  acts.appendChild(yes); acts.appendChild(pv); card.appendChild(acts);
+  card.appendChild(el('div','ptip','מילה קשה? לוחצים עליה והיא מתחלקת להברות.'));
+}
+
+function lessonNav(card, lockNext){
+  var acts = el('div','acts');
+  var nx = el('button','btn yes', state.queue.length===1 ? 'סִיַּמְנוּ!' : 'הַבָּא'); nx.id='btn-lesson-next';
+  nx.disabled = !!lockNext; nx.onclick = next;
+  var pv = el('button','btn again','הַקּוֹדֵם'); pv.id='btn-lesson-prev'; pv.disabled = !state.hist.length; pv.onclick = back;
+  acts.appendChild(nx); acts.appendChild(pv); card.appendChild(acts);
+  return nx;
+}
+
+function pbox(text){ var b = el('div','pbox'); b.appendChild(el('b',null,'להורה – להקריא:')); b.appendChild(document.createTextNode(text)); return b; }
 
 function renderLesson(card, x){
   if (x.t==='intro'){
@@ -556,6 +682,41 @@ function renderLesson(card, x){
       cols.appendChild(c);
     });
     card.appendChild(cols);
+  } else if (x.t==='nikud'){
+    card.appendChild(el('div','lhead','שְׁתֵּי נְקֻדּוֹת'));
+    var cols2 = el('div','lcols pop');
+    [['ֵ','צֵירֵה','e', x.tsere], ['ְ','שְׁוָא','כִּמְעַט לֹא שׁוֹמְעִים', x.shva]].forEach(function(it){
+      var c = el('div','lcol');
+      c.appendChild(el('div','L', 'ב'+it[0]));
+      c.appendChild(el('div','T', it[1]));
+      c.appendChild(el('div','S'+(it[2]==='e'?'':' he'), it[2]));
+      it[3].forEach(function(w){ var d = el('div','W'); d.appendChild(hlMark(w, it[0])); c.appendChild(d); });
+      cols2.appendChild(c);
+    });
+    card.appendChild(cols2);
+    card.appendChild(pbox(x.text));
+  } else if (x.t==='parent'){
+    card.appendChild(el('div','lhead', x.head));
+    card.appendChild(el('div','splitw pop', x.w));
+    card.appendChild(pbox(x.text));
+  } else if (x.t==='quiz'){
+    card.appendChild(el('div','lhead','אֵיךְ קוֹרְאִים?'));
+    card.appendChild(el('div','splitw pop', x.w));
+    var grid = el('div','choices two'), missed = false, nx;
+    shuffle([[x.a,'אַח',true],[x.a,'חַ',false]]).forEach(function(o,k){
+      var b = el('button','choice'); b.id='qchoice-'+k; b.appendChild(splitRow([o[0],o[1]]));
+      b.onclick = function(){
+        if (o[2]){
+          b.classList.add('right'); if (!missed) reward(b); else sfx('yes');
+          grid.querySelectorAll('button').forEach(function(z){ z.disabled=true; });
+          nx.disabled = false; nx.focus();
+        } else { missed = true; b.classList.remove('wrong'); void b.offsetWidth; b.classList.add('wrong'); sfx('no'); }
+      };
+      grid.appendChild(b);
+    });
+    card.appendChild(grid);
+    nx = lessonNav(card, true);
+    return;
   } else {
     card.appendChild(el('div','lhead','פַּתָּח גָּנוּב'));
     card.appendChild(el('div','splitw pop', x.w));
@@ -565,13 +726,7 @@ function renderLesson(card, x){
     x.more.forEach(function(m){ var r = splitRow([m[1],m[2]]); r.insertBefore(el('span','op','='), r.firstChild); r.insertBefore(el('span',null,m[0]), r.firstChild); more.appendChild(r); });
     card.appendChild(more);
   }
-  var acts = el('div','acts');
-  var nx = el('button','btn yes', state.queue.length===1 ? 'סִיַּמְנוּ!' : 'הַבָּא'); nx.id='btn-lesson-next';
-  nx.onclick = function(){ state.hist.push(state.queue.shift()); state.done++; renderCard(); };
-  var pv = el('button','btn again','הַקּוֹדֵם'); pv.id='btn-lesson-prev'; pv.disabled = !state.hist.length;
-  if (!state.hist.length) pv.style.opacity='.4';
-  pv.onclick = function(){ if (!state.hist.length) return; state.queue.unshift(state.hist.pop()); state.done--; renderCard(); };
-  acts.appendChild(nx); acts.appendChild(pv); card.appendChild(acts);
+  lessonNav(card, false);
 }
 function splitRow(parts){
   var r = el('div','split');
@@ -583,7 +738,7 @@ function renderPic(card, item){
   card.appendChild(el('div','pic pop', item[0]));
   var pool = []; for (var i=0;i<=state.stage;i++) pool = pool.concat(STAGES[i].pics.map(function(p){return p[1];}));
   var opts = shuffle(shuffle(pool.filter(function(w){return w!==item[1];})).slice(0,2).concat([item[1]]));
-  var grid = el('div','choices'), msg = el('div','msg',''), missed = false;
+  var grid = el('div','choices'), missed = false;
   opts.forEach(function(w,k){
     var b = el('button','choice',w); b.id='choice-'+k;
     b.onclick = function(){
@@ -600,14 +755,14 @@ function renderPic(card, item){
     };
     grid.appendChild(b);
   });
-  card.appendChild(grid); card.appendChild(msg);
+  card.appendChild(grid);
 }
 
 function renderLtr(card, q){
   card.appendChild(el('div','ask','אֵיזֶה צְלִיל?'));
   card.appendChild(el('div','qltr pop', q.l));
   var opts = shuffle(q.g.items);
-  var grid = el('div','choices'+(opts.length===2?' two':'')), msg = el('div','msg',''), missed = false;
+  var grid = el('div','choices'+(opts.length===2?' two':'')), missed = false;
   var reveal = el('div'); reveal.style.display='contents';
   opts.forEach(function(it,k){
     var b = el('button','choice lat',it[1]); b.id='lchoice-'+k;
@@ -629,24 +784,205 @@ function renderLtr(card, q){
     };
     grid.appendChild(b);
   });
-  card.appendChild(grid); card.appendChild(msg); card.appendChild(reveal);
+  card.appendChild(grid); card.appendChild(reveal);
+}
+
+function paint(btn, color){ btn.querySelectorAll('.fz').forEach(function(z){ z.setAttribute('fill', color || '#FFFFFF'); }); }
+function colorGrid(onTap){
+  var grid = el('div','cgrid');
+  COBJ.filter(function(o){ return o.s<=state.stage; }).forEach(function(o){
+    var b = el(onTap ? 'button' : 'div','cobj'); if (onTap){ b.id='obj-'+o.id; b.setAttribute('aria-label', o.n); }
+    b.innerHTML = '<svg viewBox="0 0 300 200" aria-hidden="true">'+o.svg+'</svg>';
+    paint(b, state.fills[o.id]);
+    if (onTap) b.onclick = function(){ onTap(o, b); };
+    grid.appendChild(b);
+  });
+  return grid;
+}
+function renderColor(card, item){
+  card.appendChild(el('div','ask', g('קְרָא וּצְבַע','קִרְאִי וְצִבְעִי')));
+  card.appendChild(el('div','sent pop', item.o.n+' '+item.c.n+'.'));
+  var pal = el('div','pal');
+  CCOL.filter(function(c){ return c.s<=state.stage; }).forEach(function(c,k){
+    var sw = el('button','sw'+(state.sel===c.n?' on':'')); sw.id='sw-'+k; sw.style.background = c.c; sw.setAttribute('aria-label', c.n);
+    sw.onclick = function(){ state.sel = c.n; pal.querySelectorAll('.sw').forEach(function(z){ z.classList.remove('on'); }); sw.classList.add('on'); sfx('paint'); };
+    pal.appendChild(sw);
+  });
+  card.appendChild(pal);
+  var missed = false;
+  card.appendChild(colorGrid(function(o, b){
+    if (!state.sel){ pal.classList.remove('shake'); void pal.offsetWidth; pal.classList.add('shake'); return; }
+    if (o.id===item.o.id && state.sel===item.c.n){
+      state.fills[o.id] = item.c.c; paint(b, item.c.c);
+      if (!missed) reward(b); else sfx('yes');
+      state.sel = null;
+      setTimeout(next, 700);
+    } else {
+      if (!missed) state.mistakes++;
+      missed = true; b.classList.remove('wrong'); void b.offsetWidth; b.classList.add('wrong'); sfx('no');
+    }
+  }));
+}
+
+/* ---------- syllables + speech ---------- */
+function speak(t){
+  if (state.muted || !('speechSynthesis' in window)) return;
+  try {
+    speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(t); u.lang = 'he-IL'; u.rate = .75;
+    var v = speechSynthesis.getVoices().filter(function(x){ return /^(he|iw)/i.test(x.lang); })[0]; if (v) u.voice = v;
+    speechSynthesis.speak(u);
+  } catch(e) {}
+}
+function splitSyl(w){
+  var cl = clusters(w).filter(function(c){ return /[א-ת]/.test(c[0]); });
+  var V = /[ֱ-ֻ]/;
+  function vav(c){ return c && c[0]==='ו' && (c.indexOf('ֹ')>0 || (c.indexOf('ּ')>0 && !/[ֱ-ָֺֻ]/.test(c))); }
+  var syl = [], pend = '', last = cl.length-1;
+  cl.forEach(function(c,i){
+    if (vav(c)){ if (pend){ syl.push(pend+c); pend=''; } else syl.push(c); return; }
+    if (i===last && /[חע]/.test(c[0]) && c.indexOf('ַ')>0 && syl.length && !/[ַָ]/.test(cl[i-1])){ syl[syl.length-1]+=c; return; }
+    if (V.test(c)){ syl.push(pend+c); pend=''; return; }
+    if (c.indexOf('ְ')>0){
+      var prevSh = i>0 && cl[i-1].indexOf('ְ')>0;
+      if (!syl.length || prevSh || pend){ pend+=c; return; }
+      syl[syl.length-1]+=c; return;
+    }
+    if (vav(cl[i+1]) || !syl.length){ pend+=c; return; }
+    syl[syl.length-1]+=c;
+  });
+  if (pend){ if (syl.length) syl[syl.length-1]+=pend; else syl.push(pend); }
+  return syl;
+}
+function wordBtn(w){
+  var b = el('button','wtok',w);
+  b.onclick = function(){
+    var parts = splitSyl(w);
+    if (parts.length<2){ speak(w); return; }
+    var grp = el('span','sylg');
+    parts.forEach(function(p){
+      var c = el('button','syl',p);
+      c.onclick = function(){
+        grp.querySelectorAll('.syl').forEach(function(z){ z.classList.remove('on'); });
+        c.classList.add('on'); c.dataset.did = '1'; speak(p);
+        if (grp.querySelectorAll('[data-did]').length===parts.length && !grp.dataset.said){
+          grp.dataset.said = '1';
+          setTimeout(function(){ grp.querySelectorAll('.syl').forEach(function(z){ z.classList.add('on'); }); speak(w); }, 1100);
+        }
+      };
+      grp.appendChild(c);
+    });
+    var whole = el('button','sylw','🔊'); whole.setAttribute('aria-label','להקריא את כל המילה');
+    whole.onclick = function(){ grp.querySelectorAll('.syl').forEach(function(z){ z.classList.add('on'); }); speak(w); };
+    grp.appendChild(whole);
+    b.replaceWith(grp);
+  };
+  return b;
+}
+function readable(text, cls){
+  var box = el('div', cls);
+  text.split(' ').forEach(function(tok,i){
+    if (i) box.appendChild(document.createTextNode(' '));
+    var m = tok.match(/^([^֐-׿]*)([֐-׿]+)([^֐-׿]*)$/);
+    if (!m){ box.appendChild(document.createTextNode(tok)); return; }
+    if (m[1]) box.appendChild(document.createTextNode(m[1]));
+    box.appendChild(wordBtn(m[2]));
+    if (m[3]) box.appendChild(document.createTextNode(m[3]));
+  });
+  return box;
+}
+
+/* ---------- test: which letters and vowels are easy / hard ---------- */
+var VOW = [
+  {k:'kamatz', m:'ָ', n:'קָמָץ'}, {k:'patach', m:'ַ', n:'פַּתָּח'}, {k:'tsere', m:'ֵ', n:'צֵירֵה'}, {k:'segol', m:'ֶ', n:'סֶגּוֹל'},
+  {k:'hiriq', m:'ִ', n:'חִירִיק'}, {k:'holam', m:'ֹ', n:'חוֹלָם'}, {k:'kubutz', m:'ֻ', n:'קֻבּוּץ'},
+  {k:'holamv', m:'וֹ', n:'חוֹלָם מָלֵא', s:2}, {k:'shuruk', m:'וּ', n:'שׁוּרוּק', s:2}, {k:'shva', m:'ְ', n:'שְׁוָא', s:2}
+];
+function vowFor(stage){ return VOW.filter(function(v){ return (v.s||0)<=stage; }); }
+function learned(){ var out=[]; for (var i=0;i<=state.stage;i++) out = out.concat(STAGES[i].letters); return out; }
+function onsets(){ return learned().map(function(l){ return l[0]; }).filter(function(l){ return 'םןץךףו'.indexOf(l[0])<0; }); }
+function sylOf(l, v){ if (v.k!=='shva') return l+v.m; var c = ['ל','מ','ר','נ'].filter(function(x){ return onsets().indexOf(x)>=0; }); return l+v.m+pick(c.length?c:['ל'])+'\u05B8'; }
+function testItems(){
+  var lets = learned().filter(function(l){ return l[0]!=='וֹ' && l[0]!=='וּ'; }).map(function(l){ return {kind:'l', key:l[0], show:l[0]}; });
+  var vows = vowFor(state.stage).map(function(v){ return {kind:'v', key:v.k, show:sylOf(pick(onsets()), v)}; });
+  return shuffle(lets).concat(shuffle(vows));
+}
+function renderTest(card, it){
+  card.appendChild(el('div','ask', it.kind==='l' ? 'אֵיזֶה צְלִיל?' : 'אֵיךְ קוֹרְאִים?'));
+  card.appendChild(el('div', (it.kind==='l'?'qltr':'big')+' pop', it.show));
+  var j = el('div','judge');
+  [['easy','בקלות','j-easy'],['slow','לאט / עם עזרה','j-slow'],['no',g('לא ידע','לא ידעה'),'j-no']].forEach(function(o){
+    var b = el('button','jbtn '+o[2], o[1]); b.id='judge-'+o[0];
+    b.onclick = function(){ state.res[it.kind+':'+it.key] = o[0]; if (o[0]!=='no') reward(b); else state.mistakes++; next(); };
+    j.appendChild(b);
+  });
+  card.appendChild(j);
+  card.appendChild(el('div','ptip','להורה: '+KID+' '+g('אומר','אומרת')+' את הצליל, ואתם בוחרים איך זה הלך.'));
+}
+function labelOf(kind, key){ if (kind==='l') return key; var v = VOW.filter(function(x){ return x.k===key; })[0]; return v ? v.n : key; }
+function finishTest(){
+  var items = [];
+  Object.keys(state.res).forEach(function(k){ if (state.res[k]!=='easy'){ var p = k.split(':'); items.push({kind:p[0], key:p.slice(1).join(':'), label:labelOf(p[0], p.slice(1).join(':'))}); } });
+  state.tested[state.stage] = true;
+  state.weak[state.stage] = {items:items, cnt:{}};
+}
+function testSummary(){
+  var box = el('div','res'), easy = el('div','chips'), hard = el('div','chips');
+  Object.keys(state.res).forEach(function(k){ var p = k.split(':'); var c = el('span','chip'+(state.res[k]==='easy'?'':' bad'), labelOf(p[0], p.slice(1).join(':'))); (state.res[k]==='easy'?easy:hard).appendChild(c); });
+  box.appendChild(el('b',null,'בקלות')); box.appendChild(easy);
+  box.appendChild(el('b',null,'צריך תרגול')); box.appendChild(hard.childNodes.length ? hard : el('div',null,'אין – הכול בקלות!'));
+  return box;
+}
+/* ---------- focus: practice only what was hard ---------- */
+function hasKey(word, w){
+  if (w.kind==='l') return clusters(word).some(function(c){ return c[0]===w.key[0] && keyMarks(c)===keyMarks(w.key); });
+  var v = VOW.filter(function(x){ return x.k===w.key; })[0]; return v && word.indexOf(v.m)>=0;
+}
+function focusItems(){
+  var weak = weakOf(state.stage), pool = [];
+  for (var i=0;i<=state.stage;i++) pool = pool.concat(STAGES[i].words.map(function(x){ return norm(x).t; }));
+  var out = [];
+  weak.forEach(function(w){
+    var on = onsets();
+    if (w.kind==='l' && on.indexOf(w.key)>=0) shuffle(vowFor(state.stage).filter(function(v){ return v.k!=='shva'; })).slice(0,2).forEach(function(v){ out.push({t:sylOf(w.key, v), key:w.kind+':'+w.key, label:w.label}); });
+    if (w.kind==='v'){ var v = VOW.filter(function(x){ return x.k===w.key; })[0]; shuffle(on).slice(0,2).forEach(function(l){ out.push({t:sylOf(l, v), key:w.kind+':'+w.key, label:w.label}); }); }
+    shuffle(pool.filter(function(word){ return hasKey(word, w); })).sort(function(a,b){ return score(a)-score(b); }).slice(0,3).forEach(function(word){ out.push({t:word, key:w.kind+':'+w.key, label:w.label}); });
+  });
+  return shuffle(out).slice(0,16);
+}
+function focusHit(key){
+  var wk = state.weak[state.stage]; if (!wk) return;
+  wk.cnt[key] = (wk.cnt[key]||0) + 1;
+  if (wk.cnt[key] >= 3) wk.items = wk.items.filter(function(w){ return w.kind+':'+w.key !== key; });
+  save();
 }
 
 function finishRound(card){
   var stg = state.stage, mode = state.mode, wasDone = stageDone(stg);
-  if (!isDone(stg,mode)){ (state.completed[stg] = state.completed[stg]||[]).push(mode); save(); }
+  if (mode==='test') finishTest();
+  state.rounds[stg] = state.rounds[stg] || {};
+  state.rounds[stg][mode] = roundsOf(stg,mode) + 1;
+  save();
   var perfect = state.mistakes===0, learn = mode==='learn';
-  card.appendChild(el('div','win pop', learn ? 'יוֹפִי'+(REAL?', '+REAL:'')+'!' : perfect ? 'בְּלִי אַף טָעוּת!' : 'כָּל הַכָּבוֹד'+(REAL?', '+REAL:'')+'!'));
+  card.appendChild(el('div','win pop', mode==='test' ? 'סִיַּמְנוּ אֶת הַמִּבְחָן!' : learn ? 'יוֹפִי'+(REAL?', '+REAL:'')+'!' : perfect ? 'בְּלִי אַף טָעוּת!' : 'כָּל הַכָּבוֹד'+(REAL?', '+REAL:'')+'!'));
+  if (mode==='color') card.appendChild(colorGrid(null));
+  if (mode==='test') card.appendChild(testSummary());
+  if (mode==='focus' && !weakOf(stg).length) card.appendChild(el('div','praise','כָּל הַקָּשִׁים תֻּרְגְּלוּ!'));
   var tr = el('div','trophy pop'); tr.innerHTML = STAR+STAR+STAR; if (!perfect && !learn) tr.lastChild.style.opacity='.3'; card.appendChild(tr);
   card.appendChild(el('div','praise', learn ? 'לָמַדְנוּ! עַכְשָׁו נְתַרְגֵּל' : g('סִיַּמְתָּ','סִיַּמְתְּ')+' אֶת כָּל '+DONE_NAME[mode]+'! '+g('קִבַּלְתָּ','קִבַּלְתְּ')+' '+state.roundStars+' כּוֹכָבִים'));
   var a = el('div','acts');
-  var again = el('button','btn yes','עוֹד סִבּוּב'); again.id='btn-again-round'; again.onclick = startRound; a.appendChild(again);
-  var rest = modesFor(stg).filter(function(m){ return !isDone(stg,m); });
-  if (rest.length){
+  var again = el('button','btn yes', isDone(stg,mode) ? 'עוֹד סִבּוּב' : 'עוֹד סִבּוּב – מִלִּים חֲדָשׁוֹת'); again.id='btn-again-round'; again.onclick = startRound;
+  if (mode==='learn') again.textContent = 'לַשִּׁעוּר שׁוּב';
+  var rest = modesFor(stg).filter(function(m){ return !isDone(stg,m) && m!==mode; });
+  if (mode==='test' && weakOf(stg).length) rest = ['focus'];
+  if (mode==='test' || mode==='focus') again.textContent = mode==='test' ? 'מִבְחָן שׁוּב' : 'עוֹד אִמּוּן';
+  if (isDone(stg,mode) && rest.length){
     var nm = MODES.filter(function(m){return m[0]===rest[0];})[0];
-    var b2 = el('button','btn again',nm[1]); b2.id='btn-next-mode';
+    var b2 = el('button','btn yes',nm[1]); b2.id='btn-next-mode';
     b2.onclick = function(){ state.mode=rest[0]; renderTabs(); startRound(); }; a.appendChild(b2);
+    again.className = 'btn again';
   }
+  a.appendChild(again);
   var db = el('button','btn again','🐶 לַכֶּלֶב שֶׁלִּי'); db.id='btn-go-dog'; db.onclick = openDog; a.appendChild(db);
   card.appendChild(a);
   renderTabs(); renderStages();
@@ -655,7 +991,7 @@ function finishRound(card){
   if (!wasDone && stageDone(stg) && !state.celebrated[stg]){
     state.celebrated[stg] = true; save();
     setTimeout(function(){ showStageModal(stg); }, 1400);
-  } else again.focus();
+  }
 }
 
 /* ---------- stage celebration ---------- */
@@ -781,7 +1117,7 @@ function hearts(n){
     scene.appendChild(h); setTimeout(function(){ h.remove(); }, 1400);
   }, i*160); })(i); }
 }
-function hop(){ var g = document.getElementById('dog'); g.classList.remove('hop'); void g.offsetWidth; g.classList.add('hop'); }
+function hop(){ var d = document.getElementById('dog'); d.classList.remove('hop'); void d.offsetWidth; d.classList.add('hop'); }
 function happy(){ hop(); hearts(3); sfx('bark'); }
 function feed(e){
   var f = el('span','food',e); f.setAttribute('aria-hidden','true');
@@ -797,25 +1133,43 @@ document.getElementById('dogClose').onclick = closeDog;
 document.getElementById('dog').onclick = happy;
 document.getElementById('dogName').addEventListener('input', function(e){ state.dog.name = e.target.value; save(); });
 
-function renderAll(){ renderStages(); renderLetters(); renderTabs(); startRound(); document.getElementById('starCount').textContent=state.stars; }
+function renderAll(){ renderAbc(); renderTabs(); renderStages(); startRound(); document.getElementById('starCount').textContent=state.stars; }
 
 document.addEventListener('keydown', function(e){
-  if ((e.key===' '||e.key==='Enter') && (state.mode==='words'||state.mode==='sent') && state.queue.length && document.getElementById('overlay').hidden && document.getElementById('dogOv').hidden && document.getElementById('setupOv').hidden){
+  if ((e.key===' '||e.key==='Enter') && (state.mode==='words'||state.mode==='sent'||state.mode==='story') && state.queue.length && document.getElementById('overlay').hidden && document.getElementById('dogOv').hidden && document.getElementById('setupOv').hidden){
     var b=document.getElementById('btn-read'), ae=document.activeElement; if (b && (!ae || (ae.tagName!=='BUTTON' && ae.tagName!=='INPUT'))){ e.preventDefault(); b.click(); }
   }
   if (e.key==='Escape'){ document.getElementById('overlay').hidden = true; closeDog(); }
 });
 
+/* ---------- child name (with optional nikud) ---------- */
+var MARKS = [['ַ','פתח'],['ָ','קמץ'],['ֵ','צירה'],['ֶ','סגול'],['ִ','חיריק'],['ֹ','חולם'],['ֻ','קובוץ'],['ְ','שווא'],['ּ','דגש'],['ׁ','נקודה ימנית בשׁ'],['ׂ','נקודה שמאלית בשׂ']];
+var nameInp = document.getElementById('kidName'), caret = null;
+['keyup','click','input','select','focus'].forEach(function(ev){ nameInp.addEventListener(ev, function(){ caret = nameInp.selectionEnd; }); });
+(function(){
+  var pad = document.getElementById('nikpad');
+  MARKS.forEach(function(m,k){
+    var b = el('button',null,'◌'+m[0]); b.type='button'; b.id='nik-'+k; b.setAttribute('aria-label', m[1]);
+    b.onclick = function(){
+      var v = nameInp.value, pos = caret==null ? v.length : Math.min(caret, v.length);
+      nameInp.value = v.slice(0,pos) + m[0] + v.slice(pos); caret = pos+1;
+    };
+    pad.appendChild(b);
+  });
+  var c = el('button','clr','בלי ניקוד'); c.type='button'; c.id='nik-clear';
+  c.onclick = function(){ nameInp.value = nameInp.value.replace(/[֑-ׇ]/g,''); caret = null; };
+  pad.appendChild(c);
+})();
 function openSetup(){
-  document.getElementById('kidName').value = REAL;
+  nameInp.value = REAL; caret = null;
   document.getElementById(GEN==='m' ? 'kidM' : 'kidF').checked = true;
   document.getElementById('setupOv').hidden = false;
-  document.getElementById('kidName').focus();
+  nameInp.focus();
 }
 document.getElementById('setBtn').onclick = openSetup;
 document.getElementById('setupForm').addEventListener('submit', function(e){
   e.preventDefault();
-  var n = document.getElementById('kidName').value.trim(); if (!n) return;
+  var n = nameInp.value.trim(); if (!n) return;
   state.kid = {name:n, g:document.getElementById('kidM').checked ? 'm' : 'f'};
   save(); applyKid(); renderAll();
   document.getElementById('setupOv').hidden = true;
