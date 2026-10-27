@@ -502,7 +502,7 @@ function renderStages(){
     b.appendChild(el('b',null,'שלב '+(i+1)));
     b.appendChild(el('span',null,st.letters.map(function(l){return l[0];}).join(' ')));
     if (stageDone(i)) b.insertAdjacentHTML('beforeend', MEDAL);
-    b.onclick = function(){ state.stage=i; state.mode='learn'; save(); renderAll(); };
+    b.onclick = function(){ state.stage=i; state.mode='learn'; save(); renderAll(); goCard(); };
     box.appendChild(b);
   });
 }
@@ -531,7 +531,7 @@ function renderTabs(){
     var r = roundsOf(state.stage,m[0]);
     if (isDone(state.stage,m[0])) t.insertAdjacentHTML('beforeend', CHECK);
     else if (r>0) t.appendChild(el('span','part', r+'/'+NEED[m[0]]));
-    t.onclick = function(){ state.mode=m[0]; renderTabs(); startRound(); };
+    t.onclick = function(){ state.mode=m[0]; renderTabs(); startRound(); goCard(); };
     box.appendChild(t);
   });
 }
@@ -971,7 +971,7 @@ function finishRound(card){
   var tr = el('div','trophy pop'); tr.innerHTML = STAR+STAR+STAR; if (!perfect && !learn) tr.lastChild.style.opacity='.3'; card.appendChild(tr);
   card.appendChild(el('div','praise', learn ? 'לָמַדְנוּ! עַכְשָׁו נְתַרְגֵּל' : g('סִיַּמְתָּ','סִיַּמְתְּ')+' אֶת כָּל '+DONE_NAME[mode]+'! '+g('קִבַּלְתָּ','קִבַּלְתְּ')+' '+state.roundStars+' כּוֹכָבִים'));
   var a = el('div','acts');
-  var again = el('button','btn yes', isDone(stg,mode) ? 'עוֹד סִבּוּב' : 'עוֹד סִבּוּב – מִלִּים חֲדָשׁוֹת'); again.id='btn-again-round'; again.onclick = startRound;
+  var again = el('button','btn yes', isDone(stg,mode) ? 'עוֹד סִבּוּב' : 'עוֹד סִבּוּב – מִלִּים חֲדָשׁוֹת'); again.id='btn-again-round'; again.onclick = function(){ startRound(); goCard(); };
   if (mode==='learn') again.textContent = 'לַשִּׁעוּר שׁוּב';
   var rest = modesFor(stg).filter(function(m){ return !isDone(stg,m) && m!==mode; });
   if (mode==='test' && weakOf(stg).length) rest = ['focus'];
@@ -979,7 +979,7 @@ function finishRound(card){
   if (isDone(stg,mode) && rest.length){
     var nm = MODES.filter(function(m){return m[0]===rest[0];})[0];
     var b2 = el('button','btn yes',nm[1]); b2.id='btn-next-mode';
-    b2.onclick = function(){ state.mode=rest[0]; renderTabs(); startRound(); }; a.appendChild(b2);
+    b2.onclick = function(){ state.mode=rest[0]; renderTabs(); startRound(); goCard(); }; a.appendChild(b2);
     again.className = 'btn again';
   }
   a.appendChild(again);
@@ -1007,7 +1007,7 @@ function showStageModal(stg){
 document.getElementById('modalClose').onclick = function(){ document.getElementById('overlay').hidden = true; };
 document.getElementById('modalNext').onclick = function(){
   document.getElementById('overlay').hidden = true;
-  if (state.stage < STAGES.length-1){ state.stage++; state.mode='learn'; save(); renderAll(); }
+  if (state.stage < STAGES.length-1){ state.stage++; state.mode='learn'; save(); renderAll(); goCard(); }
 };
 
 /* ---------- confetti ---------- */
@@ -1133,6 +1133,7 @@ document.getElementById('dogClose').onclick = closeDog;
 document.getElementById('dog').onclick = happy;
 document.getElementById('dogName').addEventListener('input', function(e){ state.dog.name = e.target.value; save(); });
 
+function goCard(){ var c = document.getElementById('card'); var y = c.getBoundingClientRect().top + window.pageYOffset - 10; try { window.scrollTo({top:y, behavior: reduce ? 'auto' : 'smooth'}); } catch(e){ window.scrollTo(0,y); } }
 function renderAll(){ renderAbc(); renderTabs(); renderStages(); startRound(); document.getElementById('starCount').textContent=state.stars; }
 
 document.addEventListener('keydown', function(e){
