@@ -171,6 +171,13 @@ button:focus-visible{outline:3px solid var(--berry);outline-offset:3px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{border-radius:10px;padding:4px 10px;font-size:22px;font-weight:700;background:#DDF2E6;border:2px solid #9BD3B4}
 .chip.bad{background:#FBE1E8;border-color:#E9A3B6}
+.bk{width:100%;text-align:right;font-size:15px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+.bk summary{cursor:pointer;font-size:16px;color:var(--ink)}
+.bk[open]{display:flex;flex-direction:column;gap:8px}
+.bk p{margin:4px 0}
+.bk .btn{font-size:18px;min-height:48px;padding:10px 16px}
+.bk textarea{width:100%;box-sizing:border-box;font-size:13px;border:2px solid var(--line);border-radius:12px;padding:8px;direction:ltr;background:var(--sky);color:var(--ink)}
+#bkMsg{font-size:16px;color:var(--leaf);min-height:20px}
 .foot{font-size:14px;color:var(--muted);text-align:center;max-width:70ch;margin:0 auto;line-height:1.6}
 .overlay{position:fixed;inset:0;background:rgba(22,50,74,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20;overflow:auto}
 .modal{background:var(--paper);border-radius:28px;padding:24px 20px;max-width:540px;width:100%;margin:auto;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;border:4px solid var(--sun)}
@@ -243,6 +250,15 @@ button:focus-visible{outline:3px solid var(--berry);outline-offset:3px}
       </div>
     </fieldset>
     <button class="btn yes" type="submit" id="setupGo">מתחילים</button>
+    <details class="bk">
+      <summary>העברת התקדמות למכשיר או לכתובת אחרת</summary>
+      <p>במכשיר הישן: מעתיקים את הקוד ושומרים אותו (למשל בפתקים). במכשיר החדש: מדביקים וטוענים.</p>
+      <button type="button" class="btn again" id="bkCopy">העתקת קוד ההתקדמות</button>
+      <label for="bkIn">קוד התקדמות</label>
+      <textarea id="bkIn" rows="3" placeholder="מדביקים כאן את הקוד"></textarea>
+      <button type="button" class="btn again" id="bkLoad">טעינת הקוד</button>
+      <div id="bkMsg" role="status"></div>
+    </details>
   </form>
 </div>
 
@@ -1205,6 +1221,26 @@ document.getElementById('setupForm').addEventListener('submit', function(e){
   save(); applyKid(); renderAll();
   document.getElementById('setupOv').hidden = true;
 });
+
+/* ---------- move progress between devices / addresses ---------- */
+function progressData(){ return {stars:state.stars, stage:state.stage, completed:state.completed, celebrated:state.celebrated, rounds:state.rounds, seen:{}, tested:state.tested, weak:state.weak, dog:state.dog, muted:!!state.muted, kid:state.kid}; }
+document.getElementById('bkCopy').onclick = function(){
+  var code = 'KORET1:' + btoa(unescape(encodeURIComponent(JSON.stringify(progressData()))));
+  var ta = document.getElementById('bkIn'), msg = document.getElementById('bkMsg');
+  function fallback(){ ta.value = code; ta.focus(); ta.select(); msg.textContent = 'הקוד בתיבה – מסמנים ומעתיקים אותו.'; }
+  try { navigator.clipboard.writeText(code).then(function(){ msg.textContent = 'הקוד הועתק. שמרו אותו בפתקים.'; }, fallback); } catch(e) { fallback(); }
+};
+document.getElementById('bkLoad').onclick = function(){
+  var msg = document.getElementById('bkMsg'), v = document.getElementById('bkIn').value.trim();
+  try {
+    if (v.indexOf('KORET1:')!==0) throw 0;
+    var d = JSON.parse(decodeURIComponent(escape(atob(v.slice(7)))));
+    if (typeof d.stars!=='number') throw 0;
+    localStorage.setItem(STORE, JSON.stringify(d));
+    msg.textContent = 'נטען! הדף נטען מחדש…';
+    setTimeout(function(){ location.reload(); }, 800);
+  } catch(e) { msg.style.color = 'var(--berry)'; msg.textContent = 'הקוד לא תקין. בדקו שהעתקתם את כולו.'; }
+};
 
 renderMute();
 renderAll();
